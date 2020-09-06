@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build_storybook:
+    docker:
+      - image: circleci/node:10.13
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: Installing node modules
+          command: |
+            npm i
+      # storybookをビルドする
+      - run:
+          name: Generate Storybook
+          command: |
+            ./scripts/generateStorybookForPr.sh
+      # Artifactsにアップロードする
+      - store_artifacts:
+          path: ./storybook-static
+          destination: ~/storybook
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build_storybook
