@@ -14,4 +14,5 @@ export GITHUB_API_TOKEN="hogehoge"
 export TARGET_BRANCH=$(eval curl "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PULL_REQUEST_ID?access_token=$GITHUB_API_TOKEN" | jq '.base.ref' | tr -d '"')
 
 git fetch
-git diff origin/${TARGET_BRANCH}...HEAD --name-only | grep 'components.*\(react\|react\.story\.js\)$' | ./scripts/postModifiedStories.js
+# git diff origin/${TARGET_BRANCH}...HEAD --name-only | grep 'components.*\(react\|react\.story\.js\)$' | sh ./scripts/postModifiedStories.js
+git diff origin/${TARGET_BRANCH} | grep 'components.*\(react\|react\.story\.js\)$' | sh ./scripts/postModifiedStories.js
