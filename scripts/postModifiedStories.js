@@ -5,15 +5,22 @@ import { URL } from 'whatwg-url';
 import { post } from 'axios';
 import generateHierarchyFromFilepath from './generateHierarchyFromFilepath';
 
-const {
-    CIRCLE_BUILD_NUM,
-    CIRCLE_REPO_ID,
-    CIRCLE_NODE_INDEX,
-    GITHUB_API_TOKEN,
-    CIRCLE_PROJECT_USERNAME,
-    CIRCLE_PROJECT_REPONAME,
-    PULL_REQUEST_ID
-} = process.env;
+// const {
+//     CIRCLE_BUILD_NUM,
+//     CIRCLE_REPO_ID,
+//     CIRCLE_NODE_INDEX,
+//     GITHUB_API_TOKEN,
+//     CIRCLE_PROJECT_USERNAME,
+//     CIRCLE_PROJECT_REPONAME,
+//     PULL_REQUEST_ID
+// } = process.env;
+const CIRCLE_BUILD_NUM = process.env;
+const CIRCLE_REPO_ID = process.env;
+const CIRCLE_NODE_INDEX = process.env;
+const GITHUB_API_TOKEN = process.env;
+const CIRCLE_PROJECT_USERNAME = process.env;
+const CIRCLE_PROJECT_REPONAME = process.env;
+const PULL_REQUEST_ID = process.env;
 
 // Storybookのbase url
 const STORYBOOK_BASE_URL = `https://${CIRCLE_BUILD_NUM}-${CIRCLE_REPO_ID}-gh.circle-artifacts.com/${CIRCLE_NODE_INDEX}/~/storybook/index.html`;
