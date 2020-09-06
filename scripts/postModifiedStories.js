@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const readline = require('readline');
-const { URL } = require('whatwg-url');
-const axios = require('axios');
-const generateHierarchyFromFilepath = require('./generateHierarchyFromFilepath');
+import { createInterface } from 'readline';
+import { URL } from 'whatwg-url';
+import { post } from 'axios';
+import generateHierarchyFromFilepath from './generateHierarchyFromFilepath';
 
 const {
     CIRCLE_BUILD_NUM,
@@ -29,7 +29,7 @@ process.stdin.setEncoding('utf-8');
 // 標準入力から変更されたファイルの一覧を読む
 const getModifiedFilesFromStdin = () =>
     new Promise(resolve => {
-        const rl = readline.createInterface({
+        const rl = createInterface({
             input: process.stdin,
         });
 
@@ -69,7 +69,7 @@ const generateComment = modifiedStories => {
 const postCommentToPr = async comment => {
     const endpoint = `https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${PULL_REQUEST_ID}/comments`;
     try {
-        await axios.post(
+        await post(
             endpoint,
             {
                 body: comment,
