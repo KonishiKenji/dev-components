@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Generate Storybook
           command: |
-            ./scripts/generateStorybookForPr.sh
+            ./repo/scripts/generateStorybookForPr.sh
       # Artifactsにアップロードする
       - store_artifacts:
           path: ./storybook-static
