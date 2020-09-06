@@ -1,20 +1,14 @@
 #!/usr/bin/env node
 
-const axios = require('axios');
+import { post } from 'axios';
 
 const {
   CIRCLE_BUILD_NUM,
-
-  // Artifactsのurlのhostnameは
-  // "https://4321-12345678-gh.circle-artifacts.com"
-  // のフォーマットですが、これの "12345678" を確認し、環境変数に入れておきます。
   CIRCLE_REPO_ID,
-
   CIRCLE_NODE_INDEX,
   REVIEWDOG_GITHUB_API_TOKEN,
   CIRCLE_PROJECT_USERNAME,
   CIRCLE_PROJECT_REPONAME,
-  PULL_REQUEST_ID,
   CIRCLE_PULL_REQUEST,
 } = process.env;
 
@@ -34,7 +28,7 @@ const postCommentToPr = async comment => {
   // PRじゃないときはコメントしない
   if (!CIRCLE_PULL_REQUEST) {
     return;
-  }  
+  }
   const PID = CIRCLE_PULL_REQUEST.split("/").pop();
   const endpoint = `https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${PID}/comments`;
   try {
