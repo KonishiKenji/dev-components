@@ -7,11 +7,11 @@ if [ -z "$PULL_REQUEST_ID" ]; then
   exit 0
 fi
 
-npm run build:storybook
+npm run build-storybook
 
 export CIRCLE_REPO_ID=22704738
 export GITHUB_API_TOKEN="hogehoge"
 export TARGET_BRANCH=$(eval curl "https://api.github.com/repos/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/pulls/$PULL_REQUEST_ID?access_token=$GITHUB_API_TOKEN" | jq '.base.ref' | tr -d '"')
 
 git fetch
-git diff origin/${TARGET_BRANCH}...HEAD --name-only | grep 'components.*\(vue\|vue\.story\.js\)$' | ./scripts/postModifiedStories.js
+git diff origin/${TARGET_BRANCH}...HEAD --name-only | grep 'components.*\(react\|react\.story\.js\)$' | ./scripts/postModifiedStories.js
