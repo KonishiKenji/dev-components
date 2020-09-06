@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const axios = require('axios');
+import { post } from 'axios';
 
 const {
     CIRCLE_BUILD_NUM,
@@ -37,7 +37,7 @@ const postCommentToPr = async comment => {
     const PID = CIRCLE_PULL_REQUEST.split("/").pop();
     const endpoint = `https://api.github.com/repos/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/issues/${PID}/comments`;
     try {
-        await axios.post(
+        await post(
             endpoint,
             {
                 body: comment,
