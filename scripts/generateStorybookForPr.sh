@@ -15,4 +15,4 @@ export TARGET_BRANCH=$(eval curl "https://api.github.com/repos/$CIRCLE_PROJECT_U
 
 git fetch
 # git diff origin/${TARGET_BRANCH}...HEAD --name-only | grep 'components.*\(react\|react\.story\.js\)$' | sh ./scripts/postModifiedStories.js
-git diff origin/${TARGET_BRANCH} -- | grep 'components.*\(react\|react\.story\.js\)$' | sh ./scripts/postModifiedStories.js
+git diff | grep 'components.*\(react\|react\.story\.js\)$' | sh ./scripts/postModifiedStories.js
