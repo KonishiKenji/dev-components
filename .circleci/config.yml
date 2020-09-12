@@ -18,9 +18,9 @@ jobs:
       - run:
           name: "Generate storybook"
           command: export NODE_OPTIONS="--max-old-space-size=8192"; yarn build-storybook
-      - run:
-          name: "Post storybook"
-          command: export CIRCLE_REPO_ID="22704738"; sh ./scripts/post_storybook.js
+      # - run:
+      #     name: "Post storybook"
+      #     command: export CIRCLE_REPO_ID="22704738"; sh ./scripts/post_storybook.js
       # Artifactsにアップロードする
       - store_artifacts:
           path: ./storybook-static
