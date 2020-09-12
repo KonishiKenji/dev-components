@@ -12,7 +12,15 @@ interface Props extends WithStyles<typeof styles> {
   cancelLabel: string;
   submitLabel: string;
   errorDates?: string[];
-  locale?: { distanceInWords: (token: any, count: any, options: any) => any; format: () => any; };
+  locale?: {
+    blank: string;
+    headerFormat: string;
+    todayLabel: {
+      long: string;
+    };
+    weekdays: string[];
+    locale: typeof jaLocale;
+  };
   onChangeDate: (date: Date) => void;
   onClickCancel: () => void;
   onClickSubmit: () => void;
