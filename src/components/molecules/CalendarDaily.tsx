@@ -12,6 +12,7 @@ interface Props extends WithStyles<typeof styles> {
   cancelLabel: string;
   submitLabel: string;
   errorDates?: string[];
+  locale?: any;
   onChangeDate: (date: Date) => void;
   onClickCancel: () => void;
   onClickSubmit: () => void;
