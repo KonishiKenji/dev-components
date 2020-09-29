@@ -128,10 +128,22 @@ const apiParamFormat = (
   }
   if (result.user_in_facility.uplimit_facility_flg === Checkbox.OFF) {
     result.user_in_facility.uplimit_facility_name = null;
+    result.user_in_facility.uplimit_facility_name2 = null;
+    result.user_in_facility.uplimit_facility_name3 = null;
+    result.user_in_facility.uplimit_facility_name4 = null;
     result.user_in_facility.uplimit_controlled_by = null;
     result.user_in_facility.uplimit_facility_number = null;
+    result.user_in_facility.uplimit_facility_number2 = null;
+    result.user_in_facility.uplimit_facility_number3 = null;
+    result.user_in_facility.uplimit_facility_number4 = null;
     result.user_in_facility.uplimit_total_yen = null;
+    result.user_in_facility.uplimit_total_yen2 = null;
+    result.user_in_facility.uplimit_total_yen3 = null;
+    result.user_in_facility.uplimit_total_yen4 = null;
     result.user_in_facility.uplimit_user_load_yen = null;
+    result.user_in_facility.uplimit_user_load_yen2 = null;
+    result.user_in_facility.uplimit_user_load_yen3 = null;
+    result.user_in_facility.uplimit_user_load_yen4 = null;
     result.user_in_facility.uplimit_yen = null;
     result.user_in_facility.result_of_management = null;
   }
@@ -191,10 +203,22 @@ const resultFormat = (
   }
   if (result.user_in_facility.uplimit_facility_flg === Checkbox.OFF) {
     result.user_in_facility.uplimit_facility_name = null;
+    result.user_in_facility.uplimit_facility_name2 = null;
+    result.user_in_facility.uplimit_facility_name3 = null;
+    result.user_in_facility.uplimit_facility_name4 = null;
     result.user_in_facility.uplimit_controlled_by = null;
     result.user_in_facility.uplimit_facility_number = null;
+    result.user_in_facility.uplimit_facility_number2 = null;
+    result.user_in_facility.uplimit_facility_number3 = null;
+    result.user_in_facility.uplimit_facility_number4 = null;
     result.user_in_facility.uplimit_total_yen = null;
+    result.user_in_facility.uplimit_total_yen2 = null;
+    result.user_in_facility.uplimit_total_yen3 = null;
+    result.user_in_facility.uplimit_total_yen4 = null;
     result.user_in_facility.uplimit_user_load_yen = null;
+    result.user_in_facility.uplimit_user_load_yen2 = null;
+    result.user_in_facility.uplimit_user_load_yen3 = null;
+    result.user_in_facility.uplimit_user_load_yen4 = null;
     result.user_in_facility.uplimit_yen = null;
     result.user_in_facility.result_of_management = null;
   }
@@ -294,9 +318,21 @@ export interface UserInFacilityResult {
     uplimit_facility_flg?: string | null;
     uplimit_controlled_by?: string | null;
     uplimit_facility_number?: string | null;
+    uplimit_facility_number2?: string | null;
+    uplimit_facility_number3?: string | null;
+    uplimit_facility_number4?: string | null;
     uplimit_facility_name?: string | null;
+    uplimit_facility_name2?: string | null;
+    uplimit_facility_name3?: string | null;
+    uplimit_facility_name4?: string | null;
     uplimit_total_yen?: number | null;
+    uplimit_total_yen2?: number | null;
+    uplimit_total_yen3?: number | null;
+    uplimit_total_yen4?: number | null;
     uplimit_user_load_yen?: number | null;
+    uplimit_user_load_yen2?: number | null;
+    uplimit_user_load_yen3?: number | null;
+    uplimit_user_load_yen4?: number | null;
     result_of_management?: string | null;
     uplimit_yen?: number | null;
     create_support_plan_flg?: string | null;
@@ -387,9 +423,21 @@ const parentParamsMap = {
       childKeys: [
         "uplimit_controlled_by",
         "uplimit_facility_number",
+        "uplimit_facility_number2",
+        "uplimit_facility_number3",
+        "uplimit_facility_number4",
         "uplimit_facility_name",
+        "uplimit_facility_name2",
+        "uplimit_facility_name3",
+        "uplimit_facility_name4",
         "uplimit_total_yen",
+        "uplimit_total_yen2",
+        "uplimit_total_yen3",
+        "uplimit_total_yen4",
         "uplimit_user_load_yen",
+        "uplimit_user_load_yen2",
+        "uplimit_user_load_yen3",
+        "uplimit_user_load_yen4",
         "uplimit_yen",
         "result_of_management"
       ]
@@ -398,9 +446,21 @@ const parentParamsMap = {
       key: "uplimit_controlled_by",
       childKeys: [
         "uplimit_facility_number",
+        "uplimit_facility_number2",
+        "uplimit_facility_number3",
+        "uplimit_facility_number4",
         "uplimit_facility_name",
+        "uplimit_facility_name2",
+        "uplimit_facility_name3",
+        "uplimit_facility_name4",
         "uplimit_total_yen",
+        "uplimit_total_yen2",
+        "uplimit_total_yen3",
+        "uplimit_total_yen4",
         "uplimit_user_load_yen",
+        "uplimit_user_load_yen2",
+        "uplimit_user_load_yen3",
+        "uplimit_user_load_yen4",
         "uplimit_yen",
         "result_of_management"
       ]
@@ -580,8 +640,20 @@ export const normalizedGetFacilityUserTargetIdResponse = (
         userInFacility.uplimit_facility_flg
       ),
       uplimit_total_yen: castStringOrNull(userInFacility.uplimit_total_yen),
+      uplimit_total_yen2: castStringOrNull(userInFacility.uplimit_total_yen2),
+      uplimit_total_yen3: castStringOrNull(userInFacility.uplimit_total_yen3),
+      uplimit_total_yen4: castStringOrNull(userInFacility.uplimit_total_yen4),
       uplimit_user_load_yen: castStringOrNull(
         userInFacility.uplimit_user_load_yen
+      ),
+      uplimit_user_load_yen2: castStringOrNull(
+        userInFacility.uplimit_user_load_yen2
+      ),
+      uplimit_user_load_yen3: castStringOrNull(
+        userInFacility.uplimit_user_load_yen3
+      ),
+      uplimit_user_load_yen4: castStringOrNull(
+        userInFacility.uplimit_user_load_yen4
       ),
       result_of_management: userInFacility.result_of_management || "1",
       uplimit_yen: castString(userInFacility.uplimit_yen),
@@ -700,9 +772,21 @@ const removeNoChangeData = (
       uplimit_facility_flg: undefined,
       uplimit_controlled_by: undefined,
       uplimit_facility_number: undefined,
+      uplimit_facility_number2: undefined,
+      uplimit_facility_number3: undefined,
+      uplimit_facility_number4: undefined,
       uplimit_facility_name: undefined,
+      uplimit_facility_name2: undefined,
+      uplimit_facility_name3: undefined,
+      uplimit_facility_name4: undefined,
       uplimit_total_yen: undefined,
+      uplimit_total_yen2: undefined,
+      uplimit_total_yen3: undefined,
+      uplimit_total_yen4: undefined,
       uplimit_user_load_yen: undefined,
+      uplimit_user_load_yen2: undefined,
+      uplimit_user_load_yen3: undefined,
+      uplimit_user_load_yen4: undefined,
       result_of_management: undefined,
       uplimit_yen: undefined,
       create_support_plan_flg: undefined,
@@ -780,8 +864,20 @@ const removeNoChangeData = (
   if (diffDate.user_in_facility.uplimit_facility_flg === "1") {
     diffDate.user_in_facility.uplimit_facility_number =
       formValues.user_in_facility.uplimit_facility_number;
+    diffDate.user_in_facility.uplimit_facility_number2 =
+      formValues.user_in_facility.uplimit_facility_number2;
+    diffDate.user_in_facility.uplimit_facility_number3 =
+      formValues.user_in_facility.uplimit_facility_number3;
+    diffDate.user_in_facility.uplimit_facility_number4 =
+      formValues.user_in_facility.uplimit_facility_number4;
     diffDate.user_in_facility.uplimit_facility_name =
       formValues.user_in_facility.uplimit_facility_name;
+    diffDate.user_in_facility.uplimit_facility_name2 =
+      formValues.user_in_facility.uplimit_facility_name2;
+    diffDate.user_in_facility.uplimit_facility_name3 =
+      formValues.user_in_facility.uplimit_facility_name3;
+    diffDate.user_in_facility.uplimit_facility_name4 =
+      formValues.user_in_facility.uplimit_facility_name4;
   }
   return diffDate;
 };
@@ -886,13 +982,37 @@ export const normalizeFormValue = (
       ),
       uplimit_controlled_by: values.serviceUse.upperLimitControlledBy,
       uplimit_facility_number: values.serviceUse.upperLimitFacilityNumber,
+      uplimit_facility_number2: values.serviceUse.upperLimitFacilityNumber2,
+      uplimit_facility_number3: values.serviceUse.upperLimitFacilityNumber3,
+      uplimit_facility_number4: values.serviceUse.upperLimitFacilityNumber4,
       uplimit_facility_name: values.serviceUse.upperLimitFacilityName,
+      uplimit_facility_name2: values.serviceUse.upperLimitFacilityName2,
+      uplimit_facility_name3: values.serviceUse.upperLimitFacilityName3,
+      uplimit_facility_name4: values.serviceUse.upperLimitFacilityName4,
       uplimit_total_yen: isEmpty(values.serviceUse.upperLimitTotalYen)
         ? null
         : stringToNumber(values.serviceUse.upperLimitTotalYen),
+      uplimit_total_yen2: isEmpty(values.serviceUse.upperLimitTotalYen2)
+        ? null
+        : stringToNumber(values.serviceUse.upperLimitTotalYen2),
+      uplimit_total_yen3: isEmpty(values.serviceUse.upperLimitTotalYen3)
+        ? null
+        : stringToNumber(values.serviceUse.upperLimitTotalYen3),
+      uplimit_total_yen4: isEmpty(values.serviceUse.upperLimitTotalYen4)
+        ? null
+        : stringToNumber(values.serviceUse.upperLimitTotalYen4),
       uplimit_user_load_yen: isEmpty(values.serviceUse.upperLimitUserLoadYen)
         ? null
         : stringToNumber(values.serviceUse.upperLimitUserLoadYen),
+      uplimit_user_load_yen2: isEmpty(values.serviceUse.upperLimitUserLoadYen2)
+        ? null
+        : stringToNumber(values.serviceUse.upperLimitUserLoadYen2),
+      uplimit_user_load_yen3: isEmpty(values.serviceUse.upperLimitUserLoadYen3)
+        ? null
+        : stringToNumber(values.serviceUse.upperLimitUserLoadYen3),
+      uplimit_user_load_yen4: isEmpty(values.serviceUse.upperLimitUserLoadYen4)
+        ? null
+        : stringToNumber(values.serviceUse.upperLimitUserLoadYen4),
       result_of_management: values.serviceUse.resultOfManagement,
       uplimit_yen: stringToNumber(values.serviceUse.upperLimitYen),
       create_support_plan_flg: values.serviceUse.createSupportPlanFlag

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -37,7 +38,7 @@ export const getInOutUserSummary = async (
   uifId: number,
   year: string,
   month: string
-) => {
+): Promise<AxiosResponse<GetInOutUserSummaryResponse>> => {
   const url = `${VERSION_URL}/inout/summary/user/${uifId}/${year}/${month}`;
   return request.get<GetInOutUserSummaryResponse>(url);
 };

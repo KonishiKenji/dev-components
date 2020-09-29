@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -84,7 +85,7 @@ const getUserSummarySupportReports = async (
   year: string,
   month: string,
   excludedUserIds?: string
-) => {
+): Promise<AxiosResponse<GetUserSummarySupportReports>> => {
   const url = `${VERSION_URL}/supports/users/records/${year}/${month}`;
   const query = excludedUserIds ? `?excluded_user_ids=${excludedUserIds}` : "";
   return request.get<GetUserSummarySupportReports>(url + query);

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -39,7 +40,9 @@ export interface PostOperationsParams {
 /**
  * 指定日の業務記録を更新する
  */
-const postOperations = async (params: PostOperationsParams) => {
+const postOperations = async (
+  params: PostOperationsParams
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/operations/`;
   return request.post(url, params);
 };

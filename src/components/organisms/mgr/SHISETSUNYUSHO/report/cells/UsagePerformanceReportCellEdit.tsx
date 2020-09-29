@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import dispatches from "@stores/dispatches";
 import { createStyles, WithStyles } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { StyleRules, withStyles } from "@material-ui/core/styles";
 import TableCellWrap from "@components/atoms/TableCellWrap";
 import {
   COLLECTION_OF_UTILITY_FEE,
@@ -38,7 +38,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { AppState } from "@stores/type";
 import DropDown from "@components/atoms/DropDown";
 
-const styles = () =>
+const styles = (): StyleRules =>
   createStyles({
     dropDownStyle: {
       margin: 0,
@@ -141,203 +141,6 @@ interface DispatchProps {
 type Props = OwnProps & WithStyles<typeof styles> & DispatchProps & StateProps;
 
 class UsagePerformanceReportCellEdit extends React.Component<Props> {
-  public render() {
-    const {
-      idx,
-      usagePerformance,
-      usagePerformanceSHISETSUNYUSHO,
-      classes,
-      isDisabledFood
-    } = this.props;
-
-    // サービス提供状況が[-]かどうかの判定
-    const isStatusNone = `${usagePerformance.statusType}` === StatusType.NONE;
-
-    return (
-      <>
-        {/* サービス提供の状況 */}
-        <TableCellWrap
-          key={`${idx}-status-type`}
-          cellClass={classes.superLongCell}
-        >
-          <DropDown
-            id={`${idx}-status-type-drop-down`}
-            key={`${idx}-status-type-drop-down`}
-            options={STATUS_TYPE}
-            onChange={this.changeSelect}
-            value={`${usagePerformance.statusType}`}
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.STATUS_TYPE }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            styles={classes.statusWidth}
-          />
-        </TableCellWrap>
-
-        {/* 入院・外泊 */}
-        <TableCellWrap
-          key={`${idx}-hospitalization-overnight-stay`}
-          cellClass={classes.longCell}
-        >
-          <DropDown
-            id={`${idx}-hospitalization-overnight-stay-drop-down`}
-            key={`${idx}-hospitalization-overnight-stay-drop-down`}
-            options={HOSPITALIZATION_OVERNIGHTSTAY}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceSHISETSUNYUSHO
-                ? `${usagePerformanceSHISETSUNYUSHO.hospitalizationOvernightStay}`
-                : HospitalizationOvernightstay.NONE
-            }
-            helperText={""}
-            InputProps={{
-              name: BulkRegistrationItemList.HOSPITALIZATION_OVERNIGHTSTAY
-            }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-          />
-        </TableCellWrap>
-
-        {/* 地域移行加算 */}
-        <TableCellWrap
-          key={`${idx}-regional-transition`}
-          cellClass={classes.middleCell}
-        >
-          <DropDown
-            id={`${idx}-regional-transition-drop-down`}
-            key={`${idx}-regional-transition-drop-down`}
-            options={REGIONAL_TRANSITION}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceSHISETSUNYUSHO
-                ? `${usagePerformanceSHISETSUNYUSHO.regionalTransition}`
-                : RegionalTransition.NONE
-            }
-            helperText={""}
-            InputProps={{
-              name: BulkRegistrationItemList.REGIONAL_TRANSITION
-            }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-            styles={classes.minWidth}
-          />
-        </TableCellWrap>
-
-        {/* 光熱水費 */}
-        <TableCellWrap
-          key={`${idx}-collection-of-utility-fee`}
-          cellClass={classes.middleCell}
-        >
-          <DropDown
-            id={`${idx}-collection-of-utility-fee-drop-down`}
-            key={`${idx}-collection-of-utility-fee-drop-down`}
-            options={COLLECTION_OF_UTILITY_FEE}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceSHISETSUNYUSHO
-                ? `${usagePerformanceSHISETSUNYUSHO.collectionOfUtilityFee}`
-                : CollectionOfUtilityFee.NONE
-            }
-            helperText={""}
-            InputProps={{
-              name: BulkRegistrationItemList.COLLECTION_OF_UTILITY_FEE
-            }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-            styles={classes.minWidth}
-          />
-        </TableCellWrap>
-
-        {/* 食事提供(朝) */}
-        <TableCellWrap
-          key={`${idx}-food-breakfast`}
-          cellClass={isDisabledFood ? classes.hidden : classes.middleCell}
-        >
-          <DropDown
-            id={`${idx}-food-breakfast-drop-down`}
-            key={`${idx}-food-breakfast-drop-down`}
-            options={FOOD_BREAKFAST}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceSHISETSUNYUSHO
-                ? `${usagePerformanceSHISETSUNYUSHO.foodBreakfast}`
-                : FoodBreakfast.NONE
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.FOOD_BREAKFAST }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-            styles={classes.minWidth}
-          />
-        </TableCellWrap>
-
-        {/* 食事提供(昼) */}
-        <TableCellWrap
-          key={`${idx}-food-lunch`}
-          cellClass={isDisabledFood ? classes.hidden : classes.shortCell}
-        >
-          <DropDown
-            id={`${idx}-food-lunch-drop-down`}
-            key={`${idx}-food-lunch-drop-down`}
-            options={FOOD_LUNCH}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceSHISETSUNYUSHO
-                ? `${usagePerformanceSHISETSUNYUSHO.foodLunch}`
-                : FoodLunch.NONE
-            }
-            helperText={""}
-            InputProps={{
-              name: BulkRegistrationItemList.FOOD_LUNCH
-            }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-            styles={classes.minWidth}
-          />
-        </TableCellWrap>
-
-        {/* 食事提供(夜) */}
-        <TableCellWrap
-          key={`${idx}-food-supper`}
-          cellClass={isDisabledFood ? classes.hidden : classes.shortCell}
-        >
-          <DropDown
-            id={`${idx}-food-supper-drop-down`}
-            key={`${idx}-food-supper-drop-down`}
-            options={FOOD_SUPPER}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceSHISETSUNYUSHO
-                ? `${usagePerformanceSHISETSUNYUSHO.foodSupper}`
-                : FoodSupper.NONE
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.FOOD_SUPPER }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-            styles={classes.minWidth}
-          />
-        </TableCellWrap>
-
-        {/* 編集ボタン */}
-        <TableCellWrap
-          key={`${idx}-edit-icon`}
-          cellClass={classes.editCell}
-          align={"right"}
-        >
-          <EditIcon
-            style={{
-              width: 18,
-              height: 18,
-              color: "#0277bd",
-              cursor: "pointer"
-            }}
-            onClick={this.openModal}
-          />
-        </TableCellWrap>
-      </>
-    );
-  }
-
   /**
    * 編集モーダルの表示イベント
    */
@@ -352,29 +155,24 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
    * 値の変更イベント
    */
   private changeSelect = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const targetName = event.target.name;
+    const targetName = event.target.name as BulkRegistrationItemList;
     const targetValue = event.target.value;
-    const reportType = this.props.reportType;
+    const { reportType } = this.props;
 
-    switch (reportType) {
-      case REPEAT_DAILY:
-        this.updateStoreData(
-          targetName,
-          targetValue,
-          this.props.updateSHISETSUNYUSHOUsagePerformanceItemsDaily,
-          this.props
-            .updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsDaily
-        );
-        break;
-      case REPEAT_USERS:
-        this.updateStoreData(
-          targetName,
-          targetValue,
-          this.props.updateSHISETSUNYUSHOUsagePerformanceItemsUsers,
-          this.props
-            .updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsUsers
-        );
-        break;
+    if (reportType === REPEAT_DAILY) {
+      this.updateStoreData(
+        targetName,
+        targetValue,
+        this.props.updateSHISETSUNYUSHOUsagePerformanceItemsDaily,
+        this.props.updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsDaily
+      );
+    } else if (reportType === REPEAT_USERS) {
+      this.updateStoreData(
+        targetName,
+        targetValue,
+        this.props.updateSHISETSUNYUSHOUsagePerformanceItemsUsers,
+        this.props.updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsUsers
+      );
     }
   };
 
@@ -382,7 +180,7 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
    * store反映
    */
   private updateStoreData = (
-    targetName: string,
+    targetName: BulkRegistrationItemList,
     targetValue: string,
     updateUsagePerformanceDispatcher:
       | Props["updateSHISETSUNYUSHOUsagePerformanceItemsDaily"]
@@ -455,12 +253,236 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
           }`
       : false;
   };
+
+  public render(): JSX.Element {
+    const {
+      idx,
+      usagePerformance,
+      usagePerformanceSHISETSUNYUSHO,
+      classes,
+      isDisabledFood
+    } = this.props;
+
+    // サービス提供状況が[-]かどうかの判定
+    const isStatusNone = `${usagePerformance.statusType}` === StatusType.NONE;
+
+    return (
+      <>
+        {/* サービス提供の状況 */}
+        <TableCellWrap
+          key={`${idx}-status-type`}
+          cellClass={classes.superLongCell}
+        >
+          <DropDown
+            id={`${idx}-status-type-drop-down`}
+            key={`${idx}-status-type-drop-down`}
+            options={STATUS_TYPE}
+            onChange={this.changeSelect}
+            value={`${usagePerformance.statusType}`}
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.STATUS_TYPE }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            styles={classes.statusWidth}
+          />
+        </TableCellWrap>
+
+        {/* 入院・外泊 */}
+        <TableCellWrap
+          key={`${idx}-hospitalization-overnight-stay`}
+          cellClass={classes.longCell}
+        >
+          <DropDown
+            id={`${idx}-hospitalization-overnight-stay-drop-down`}
+            key={`${idx}-hospitalization-overnight-stay-drop-down`}
+            options={HOSPITALIZATION_OVERNIGHTSTAY}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceSHISETSUNYUSHO
+                ? `${usagePerformanceSHISETSUNYUSHO.hospitalizationOvernightStay}`
+                : HospitalizationOvernightstay.NONE
+            }
+            helperText=""
+            InputProps={{
+              name: BulkRegistrationItemList.HOSPITALIZATION_OVERNIGHTSTAY
+            }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+          />
+        </TableCellWrap>
+
+        {/* 地域移行加算 */}
+        <TableCellWrap
+          key={`${idx}-regional-transition`}
+          cellClass={classes.middleCell}
+        >
+          <DropDown
+            id={`${idx}-regional-transition-drop-down`}
+            key={`${idx}-regional-transition-drop-down`}
+            options={REGIONAL_TRANSITION}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceSHISETSUNYUSHO
+                ? `${usagePerformanceSHISETSUNYUSHO.regionalTransition}`
+                : RegionalTransition.NONE
+            }
+            helperText=""
+            InputProps={{
+              name: BulkRegistrationItemList.REGIONAL_TRANSITION
+            }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+            styles={classes.minWidth}
+          />
+        </TableCellWrap>
+
+        {/* 光熱水費 */}
+        <TableCellWrap
+          key={`${idx}-collection-of-utility-fee`}
+          cellClass={classes.middleCell}
+        >
+          <DropDown
+            id={`${idx}-collection-of-utility-fee-drop-down`}
+            key={`${idx}-collection-of-utility-fee-drop-down`}
+            options={COLLECTION_OF_UTILITY_FEE}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceSHISETSUNYUSHO
+                ? `${usagePerformanceSHISETSUNYUSHO.collectionOfUtilityFee}`
+                : CollectionOfUtilityFee.NONE
+            }
+            helperText=""
+            InputProps={{
+              name: BulkRegistrationItemList.COLLECTION_OF_UTILITY_FEE
+            }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+            styles={classes.minWidth}
+          />
+        </TableCellWrap>
+
+        {/* 食事提供(朝) */}
+        <TableCellWrap
+          key={`${idx}-food-breakfast`}
+          cellClass={isDisabledFood ? classes.hidden : classes.middleCell}
+        >
+          <DropDown
+            id={`${idx}-food-breakfast-drop-down`}
+            key={`${idx}-food-breakfast-drop-down`}
+            options={FOOD_BREAKFAST}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceSHISETSUNYUSHO
+                ? `${usagePerformanceSHISETSUNYUSHO.foodBreakfast}`
+                : FoodBreakfast.NONE
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.FOOD_BREAKFAST }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+            styles={classes.minWidth}
+          />
+        </TableCellWrap>
+
+        {/* 食事提供(昼) */}
+        <TableCellWrap
+          key={`${idx}-food-lunch`}
+          cellClass={isDisabledFood ? classes.hidden : classes.shortCell}
+        >
+          <DropDown
+            id={`${idx}-food-lunch-drop-down`}
+            key={`${idx}-food-lunch-drop-down`}
+            options={FOOD_LUNCH}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceSHISETSUNYUSHO
+                ? `${usagePerformanceSHISETSUNYUSHO.foodLunch}`
+                : FoodLunch.NONE
+            }
+            helperText=""
+            InputProps={{
+              name: BulkRegistrationItemList.FOOD_LUNCH
+            }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+            styles={classes.minWidth}
+          />
+        </TableCellWrap>
+
+        {/* 食事提供(夜) */}
+        <TableCellWrap
+          key={`${idx}-food-supper`}
+          cellClass={isDisabledFood ? classes.hidden : classes.shortCell}
+        >
+          <DropDown
+            id={`${idx}-food-supper-drop-down`}
+            key={`${idx}-food-supper-drop-down`}
+            options={FOOD_SUPPER}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceSHISETSUNYUSHO
+                ? `${usagePerformanceSHISETSUNYUSHO.foodSupper}`
+                : FoodSupper.NONE
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.FOOD_SUPPER }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+            styles={classes.minWidth}
+          />
+        </TableCellWrap>
+
+        {/* 編集ボタン */}
+        <TableCellWrap
+          key={`${idx}-edit-icon`}
+          cellClass={classes.editCell}
+          align="right"
+        >
+          <EditIcon
+            style={{
+              width: 18,
+              height: 18,
+              color: "#0277bd",
+              cursor: "pointer"
+            }}
+            onClick={this.openModal}
+          />
+        </TableCellWrap>
+      </>
+    );
+  }
 }
 const mapStateToProps = (state: AppState): StateProps => ({
   reportState: state.SHISETSUNYUSHO.report
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+type Dispatcher = {
+  updateSHISETSUNYUSHOUsagePerformanceItemsDaily: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    reportState: ReportState
+  ) => Promise<void>;
+  updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsDaily: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    reportState: ReportState
+  ) => Promise<void>;
+  updateSHISETSUNYUSHOUsagePerformanceItemsUsers: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    reportState: ReportState
+  ) => Promise<void>;
+  updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsUsers: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    reportState: ReportState
+  ) => Promise<void>;
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): Dispatcher => {
   const { SHISETSUNYUSHO } = dispatches;
 
   return {
@@ -469,7 +491,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       reportState: ReportState
-    ) =>
+    ): Promise<void> =>
       SHISETSUNYUSHO.reportDispatcher(
         dispatch
       ).updateSHISETSUNYUSHOUsagePerformanceItemsDaily(
@@ -483,7 +505,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       reportState: ReportState
-    ) =>
+    ): Promise<void> =>
       SHISETSUNYUSHO.reportDispatcher(
         dispatch
       ).updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsDaily(
@@ -497,7 +519,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       reportState: ReportState
-    ) =>
+    ): Promise<void> =>
       SHISETSUNYUSHO.reportDispatcher(
         dispatch
       ).updateSHISETSUNYUSHOUsagePerformanceItemsUsers(
@@ -511,7 +533,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       reportState: ReportState
-    ) =>
+    ): Promise<void> =>
       SHISETSUNYUSHO.reportDispatcher(
         dispatch
       ).updateSHISETSUNYUSHOUsagePerformanceSHISETSUNYUSHOItemsUsers(

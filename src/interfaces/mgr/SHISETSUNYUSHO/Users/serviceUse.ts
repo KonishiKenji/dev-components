@@ -26,6 +26,11 @@ interface Fields {
   severeDisabilitySupportStartData: SelectDateValue;
   incomeKind: RadioButtonValue;
   incomeKindType: SelectValue;
+  subsidizedFlag: SwitchValue;
+  subsidizedPercent: InputValue;
+  subsidizedYen: InputValue;
+  subsidizedUnit: SelectValue;
+  subsidizedCityId: SelectValue;
   supplementaryBenefitFlg: SwitchValue;
   supplementaryBenefitYen: InputValue;
   upperLimitFacilityFlag: SwitchValue;

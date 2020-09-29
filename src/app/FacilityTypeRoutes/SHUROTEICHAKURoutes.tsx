@@ -29,9 +29,9 @@ const SHUROTEICHAKURoutes: React.FunctionComponent<Props> = ({ user }) => (
     {/* 利用実績 */}
     <AdminRoute path="/report" component={Report} />
     {/* 利用者情報 */}
-    <AdminRoute exact={true} path={URL.USERS} component={UsersList} />
-    <AdminRoute exact={true} path="/users/new" component={CreateUser} />
-    <AdminRoute exact={true} path="/users/:id" component={EditUser} />
+    <AdminRoute exact path={URL.USERS} component={UsersList} />
+    <AdminRoute exact path="/users/new" component={CreateUser} />
+    <AdminRoute exact path="/users/:id" component={EditUser} />
     {/* 事業者情報 */}
     <AdminRoute path="/facility" component={Facility} />
     {/* default path */}

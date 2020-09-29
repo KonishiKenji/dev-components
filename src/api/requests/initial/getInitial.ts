@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -41,7 +42,9 @@ export interface GetInitialResponse {
 /**
  * 事業所情報を取得する
  */
-export const getInitial = async () => {
+export const getInitial = async (): Promise<
+  AxiosResponse<GetInitialResponse>
+> => {
   const url = `${VERSION_URL}/initial`;
   return request.get<GetInitialResponse>(url);
 };

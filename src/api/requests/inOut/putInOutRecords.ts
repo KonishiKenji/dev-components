@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -41,11 +42,11 @@ export interface RequestParam {
 
 /**
  * 対象利用者の利用実績を登録する
- * @param date  yyyymmdd
- * @param uifid number
  * @param data param
  */
-export const putInOutRecords = async (data: RequestParam) => {
+export const putInOutRecords = async (
+  data: RequestParam
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/inout/${data.yyyymmdd}/${data.uif_id}`;
   return request.put(url, data.otherParam);
 };

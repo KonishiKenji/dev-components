@@ -1,7 +1,7 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 import { Checkbox } from "@constants/variables";
-import { AxiosResponse } from "axios";
 
 export interface GetFacilityUserTargetIdResponse {
   data: {
@@ -95,12 +95,36 @@ export interface GetFacilityUserTargetIdResponse {
       uplimit_controlled_by?: string;
       // サービス提供した事業者番号
       uplimit_facility_number?: string;
+      // サービス提供した事業者番号2
+      uplimit_facility_number2?: string;
+      // サービス提供した事業者番号3
+      uplimit_facility_number3?: string;
+      // サービス提供した事業者番号4
+      uplimit_facility_number4?: string;
       // 上限額管理事業所 事業所名
       uplimit_facility_name?: string;
+      // 上限額管理事業所 事業所名2
+      uplimit_facility_name2?: string;
+      // 上限額管理事業所 事業所名3
+      uplimit_facility_name3?: string;
+      // 上限額管理事業所 事業所名4
+      uplimit_facility_name4?: string;
       // 上限管理・総費用額(金額)
       uplimit_total_yen?: string;
+      // 上限管理・総費用額(金額)2
+      uplimit_total_yen2?: string;
+      // 上限管理・総費用額(金額)3
+      uplimit_total_yen3?: string;
+      // 上限管理・総費用額(金額)4
+      uplimit_total_yen4?: string;
       // 上限管理・利用者負担額(yen)
       uplimit_user_load_yen?: string;
+      // 上限管理・利用者負担額(yen)2
+      uplimit_user_load_yen2?: string;
+      // 上限管理・利用者負担額(yen)3
+      uplimit_user_load_yen3?: string;
+      // 上限管理・利用者負担額(yen)4
+      uplimit_user_load_yen4?: string;
       // 利用者負担上限額管理結果
       result_of_management?: string;
       // 自事業所調整上限額

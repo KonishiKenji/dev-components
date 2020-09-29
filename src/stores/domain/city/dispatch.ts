@@ -16,7 +16,9 @@ export const fetch = (dispatch: Dispatch) => async (
     .getCityList(params.prefectureName)
     .then(response => {
       const data = response.data.data;
-      data.unshift(DEFAULT_CITY_STATE);
+      // todo: DEFAULT_CITY_STATE の型が CityState と異なるため any で回避…苦肉の策
+      /* eslint-disable @typescript-eslint/no-explicit-any */
+      data.unshift(DEFAULT_CITY_STATE as any);
       dispatch(action.fetch.done({ result: data }));
     })
     .catch(e => {

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -59,7 +60,7 @@ export type PostUsagePerformanceSHISETSUNYUSHOMonthlyParam = NonNullable<
 
 export const postUsagePerformanceMonthly = async (
   values: PostUsagePerformanceMonthlyParams
-) => {
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/usage_performance/monthly/set`;
   return request.post(url, values);
 };

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -25,7 +26,9 @@ export interface PostWorkplaceCompanyBody {
 /**
  * 施設外就労の詳細データの登録・もしくは更新
  */
-const postWorkplaceCompany = async (data: PostWorkplaceCompanyBody) => {
+const postWorkplaceCompany = async (
+  data: PostWorkplaceCompanyBody
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/offsite_work/workplace_company`;
   return request.post(url, data);
 };

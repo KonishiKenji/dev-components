@@ -1,8 +1,8 @@
 /**
- * 時間形式チェック
- * @param value
+ * 時刻形式チェック
+ * @param value テキスト
  */
-const checkTime = (value: string) => {
+const checkTime = (value: string): string | undefined => {
   let errorMessage;
   if (
     value !== "" &&

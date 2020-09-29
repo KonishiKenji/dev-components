@@ -235,6 +235,7 @@ const RecordWorkOutOfFacility = (props: Props): JSX.Element => {
               const beforeAccompanyStaff: string[] = [];
               if (company.staffs) {
                 company.staffs
+                  .slice(0, 3)
                   .filter(
                     (result) =>
                       result.staff_name !== null &&

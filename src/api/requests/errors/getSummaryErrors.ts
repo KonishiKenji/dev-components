@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -22,7 +23,9 @@ export interface GetSummaryErrorsResponse {
 /**
  * サマリーのエラー一覧を取得する
  */
-export const getSummaryErrors = async () => {
+export const getSummaryErrors = async (): Promise<
+  AxiosResponse<GetSummaryErrorsResponse>
+> => {
   const url = `${VERSION_URL}/errors/summary`;
   return request.get<GetSummaryErrorsResponse>(url);
 };

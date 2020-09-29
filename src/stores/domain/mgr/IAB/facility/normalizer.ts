@@ -461,12 +461,10 @@ const normalizeFormValue = (
         .visualAuditoryLanguageDisabledPeopleSupportSystemFlag
         ? STRING_TRUE_FROM_API
         : STRING_FALSE_FROM_API,
-
-      total_capacity: state.basic.multiFunctionOfficeFlag
-        ? state.basic.allCapacity !== ""
+      total_capacity:
+        state.basic.multiFunctionOfficeFlag && state.basic.allCapacity !== ""
           ? parseInt(state.basic.allCapacity, 10)
-          : null
-        : null,
+          : null,
       available_food: state.basic.mealSaservedServiceFlag
         ? STRING_TRUE_FROM_API
         : STRING_FALSE_FROM_API,
@@ -584,26 +582,33 @@ const normalizeFormValue = (
       ab_support_serious: state.additionalItem.severeSupportType,
       mental_disorder_leave_support:
         state.additionalItem.dischargeSupportFacilityType,
-      a_wage_up_date_start: state.additionalItem.wageUpStartDate
-        ? selectDateValueToDate(state.additionalItem.wageUpStartDate)
-        : null,
-      a_wage_up_date_end: state.additionalItem.wageUpEndDate
-        ? selectDateValueToDate(state.additionalItem.wageUpEndDate)
-        : null,
-      b_target_kouchin_teacher_date_start: state.additionalItem
-        .targetWageTeacherStartDate
-        ? selectDateValueToDate(state.additionalItem.targetWageTeacherStartDate)
-        : null,
-      b_target_kouchin_teacher_date_end: state.additionalItem
-        .targetWageTeacherEndDate
-        ? selectDateValueToDate(state.additionalItem.targetWageTeacherEndDate)
-        : null,
-      ab_support_ikou_result_number: state.additionalItem
-        .employmentTransitionSupportFlag
-        ? state.additionalItem.numberOfContinuations !== ""
+      a_wage_up_date_start:
+        state.additionalItem.wageUpStartDate &&
+        selectDateValueToDate(state.additionalItem.wageUpStartDate) !== ""
+          ? selectDateValueToDate(state.additionalItem.wageUpStartDate)
+          : null,
+      a_wage_up_date_end:
+        state.additionalItem.wageUpEndDate &&
+        selectDateValueToDate(state.additionalItem.wageUpEndDate) !== ""
+          ? selectDateValueToDate(state.additionalItem.wageUpEndDate)
+          : null,
+      b_target_kouchin_teacher_date_start:
+        state.additionalItem.targetWageTeacherStartDate &&
+        selectDateValueToDate(state.additionalItem.targetWageTeacherStartDate)
+          ? selectDateValueToDate(
+              state.additionalItem.targetWageTeacherStartDate
+            )
+          : null,
+      b_target_kouchin_teacher_date_end:
+        state.additionalItem.targetWageTeacherEndDate &&
+        selectDateValueToDate(state.additionalItem.targetWageTeacherEndDate)
+          ? selectDateValueToDate(state.additionalItem.targetWageTeacherEndDate)
+          : null,
+      ab_support_ikou_result_number:
+        state.additionalItem.employmentTransitionSupportFlag &&
+        state.additionalItem.numberOfContinuations !== ""
           ? parseInt(state.additionalItem.numberOfContinuations, 10)
-          : null
-        : null,
+          : null,
       work_truncate_minutes: state.workingTime.unitEngrave
         ? parseInt(state.workingTime.unitEngrave, 10)
         : null
@@ -647,10 +652,37 @@ const removeUnnecessaryValue = (
   return result;
 };
 
+/**
+ * 子要素の差分判定 子要素に差分がある場合、親要素もパラメータに付与する
+ * @param target
+ * @param after
+ */
+const addParentValue = (
+  target: PostFacilityParams,
+  after: PostFacilityParams
+): PostFacilityParams => {
+  const result = target;
+  Object.keys(parentParamsMap).forEach((facilityKey) => {
+    Object.keys(parentParamsMap[facilityKey]).forEach((paramKey) => {
+      const childKeys = parentParamsMap[facilityKey][paramKey].childKeys
+        ? parentParamsMap[facilityKey][paramKey].childKeys
+        : [];
+      const isDiffChildren: boolean = childKeys.some((childKey: string) => {
+        return result[facilityKey][childKey] !== undefined;
+      });
+      if (isDiffChildren) {
+        result[facilityKey][parentParamsMap[facilityKey][paramKey].key] =
+          after[facilityKey][parentParamsMap[facilityKey][paramKey].key];
+      }
+    });
+  });
+  return result;
+};
+
 const removeNoChangeData = (
   after: PostFacilityParams,
   before: PostFacilityParams
-) => {
+): PostFacilityParams => {
   const target: PostFacilityParams = {
     facility: {
       gov_business_owner: after.facility.gov_business_owner,
@@ -742,40 +774,16 @@ const removeNoChangeData = (
   Object.keys(target).forEach((key) => {
     Object.keys(target[key]).forEach((param) => {
       if (target[key][param] === undefined) {
-        `${before[key][param]}` !== `${after[key][param]}`
-          ? (target[key][param] = after[key][param])
-          : (target[key][param] = undefined);
+        if (`${before[key][param]}` !== `${after[key][param]}`) {
+          target[key][param] = after[key][param];
+        } else {
+          target[key][param] = undefined;
+        }
       }
     });
   });
 
   return addParentValue(target, after);
-};
-
-/**
- * 子要素の差分判定　子要素に差分がある場合、親要素もパラメータに付与する
- * @param target
- * @param after
- */
-const addParentValue = (
-  target: PostFacilityParams,
-  after: PostFacilityParams
-): PostFacilityParams => {
-  Object.keys(parentParamsMap).forEach((facilityKey) => {
-    Object.keys(parentParamsMap[facilityKey]).forEach((paramKey) => {
-      const childKeys = parentParamsMap[facilityKey][paramKey].childKeys
-        ? parentParamsMap[facilityKey][paramKey].childKeys
-        : [];
-      const isDiffChildren: boolean = childKeys.some((childKey: string) => {
-        return target[facilityKey][childKey] !== undefined;
-      });
-      if (isDiffChildren) {
-        target[facilityKey][parentParamsMap[facilityKey][paramKey].key] =
-          after[facilityKey][parentParamsMap[facilityKey][paramKey].key];
-      }
-    });
-  });
-  return target;
 };
 
 /**

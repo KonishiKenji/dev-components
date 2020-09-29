@@ -1,6 +1,6 @@
 import * as React from "react";
 import { connect } from "react-redux";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, StyleRules } from "@material-ui/core/styles";
 import { createStyles, WithStyles, Theme } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import InOutReportDailyHeader from "@components/organisms/mgr/JIRITSUKUNRENSEIKATSU/report/InOutReportDailyHeader";
@@ -27,7 +27,7 @@ import {
   initialValues
 } from "@initialize/mgr/JIRITSUKUNRENSEIKATSU/report/initialValues";
 
-const styles = ({ spacing, palette }: Theme) =>
+const styles = ({ spacing, palette }: Theme): StyleRules =>
   createStyles({
     headerWrapper: {
       position: "sticky",
@@ -73,12 +73,18 @@ type Props = StateProps & DispatchProps & WithStyles<typeof styles>;
 interface State {
   selectedDate: Date;
   headerHeight: number;
-  isOpenErrorDialog: boolean;
   isOpenInOutReportDialog: boolean;
   data: InitialDataValues;
   isOpenDetailModal: boolean;
   initialFlg: boolean;
 }
+
+type RectangleBoxConfig = {
+  title: string;
+  denom: number | undefined;
+  num: number;
+  unit: string;
+};
 
 const currentDateForMonthly = new Date();
 // 日付の最大値の設定 (30年後の12月31日)
@@ -88,17 +94,19 @@ const minDate = new Date(2001, 0, 1);
  * 利用実績（日ごと）
  */
 class InOutReportDaily extends React.Component<Props, State> {
-  public readonly state: State = {
-    selectedDate: new Date(),
-    headerHeight: 0,
-    isOpenErrorDialog: false,
-    isOpenInOutReportDialog: false,
-    data: initialValues(),
-    initialFlg: true,
-    isOpenDetailModal: false
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      selectedDate: new Date(),
+      headerHeight: 0,
+      isOpenInOutReportDialog: false,
+      data: initialValues(),
+      initialFlg: true,
+      isOpenDetailModal: false
+    };
+  }
 
-  public componentDidMount() {
+  public componentDidMount(): void {
     Promise.all([
       this.props.fetchDaily(this.state.selectedDate),
       this.props.fetchFacility(),
@@ -107,12 +115,15 @@ class InOutReportDaily extends React.Component<Props, State> {
     ]);
   }
 
-  public componentDidUpdate() {
+  public componentDidUpdate(): void {
     const top = document.getElementById("reportDailyHeader");
     if (top && top.clientHeight !== this.state.headerHeight) {
-      this.setState({
-        headerHeight: top.clientHeight
-      });
+      const setClientHeight = (): void => {
+        this.setState({
+          headerHeight: top.clientHeight
+        });
+      };
+      setClientHeight();
     }
   }
 
@@ -123,16 +134,13 @@ class InOutReportDaily extends React.Component<Props, State> {
     title: string,
     num: number | null | undefined,
     denom?: number
-  ): {
-    title: string;
-    denom: number | undefined;
-    num: number;
-    unit: string;
-  } => {
+  ): RectangleBoxConfig => {
     return { title, denom, num: num || 0, unit: "人" };
   };
 
-  private createRectangleList = (summary: InOutReportState["summary"]) => {
+  private createRectangleList = (
+    summary: InOutReportState["summary"]
+  ): RectangleBoxConfig[] => {
     const { serviceCounts } = summary;
     return [
       this.genRectangleBoxConfig("送迎（片道）", serviceCounts.oneWayCount),
@@ -169,8 +177,12 @@ class InOutReportDaily extends React.Component<Props, State> {
       initialFlg: param.initialFlg !== undefined ? param.initialFlg : true
     });
     // 日付情報はparamに存在しない為
-    param.target_date = dateInHyphenYYYYMMDDFormat(this.state.selectedDate);
-    this.setState({ data: initialValues(param) });
+    const inoutState = {
+      ...param,
+      target_date: dateInHyphenYYYYMMDDFormat(this.state.selectedDate)
+    };
+    this.setState({ data: initialValues(inoutState) });
+
     if (param.uif_id) {
       this.props.fetchOneUser(`${param.uif_id}`).then(() => {
         this.setState({ isOpenInOutReportDialog: true });
@@ -183,6 +195,7 @@ class InOutReportDaily extends React.Component<Props, State> {
   };
 
   private onSubmit = (): void => {
+    this.props.fetchDaily(this.state.selectedDate);
     this.props.fetchSummary(this.state.selectedDate);
     this.props.fetchInoutError(this.state.selectedDate);
   };
@@ -272,21 +285,25 @@ const mapStateToProps = (state: AppState): StateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
   const { JIRITSUKUNRENSEIKATSU, errorsDispatcher } = dispatches;
   const reportDispacher = JIRITSUKUNRENSEIKATSU.reportDispacher(dispatch);
   return {
     fetchOneUser: JIRITSUKUNRENSEIKATSU.userInFacilityDispatcher(dispatch)
       .fetchOne,
     fetchFacility: JIRITSUKUNRENSEIKATSU.facilityDispatcher(dispatch).fetch,
-    fetchDaily: (date: Date) =>
+    fetchDaily: (date: Date): Promise<void> =>
       reportDispacher.fetchJIRITSUKUNRENSEIKATSUDaily(date),
     fetchInoutError: errorsDispatcher(dispatch).inout,
-    fetchSummary: (date: Date) =>
+    fetchSummary: (date: Date): Promise<void> =>
       reportDispacher.fetchJIRITSUKUNRENSEIKATSUDailySummary(date),
-    postDaily: (addtionDaily: InOutReportState["reports"]["additionsDaily"]) =>
+    postDaily: (
+      addtionDaily: InOutReportState["reports"]["additionsDaily"]
+    ): Promise<void> =>
       reportDispacher.postJIRITSUKUNRENSEIKATSUInOutAllRecord(addtionDaily),
-    openErrorsDialog: () => dispatch(errorsDialogActions.showErrorsDialog())
+    openErrorsDialog: (): {
+      readonly type: "UI/SHOW_ERRORS_DIALOG";
+    } => dispatch(errorsDialogActions.showErrorsDialog())
   };
 };
 

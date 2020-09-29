@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -39,7 +40,11 @@ export interface GetInOutUserReportResponse {
  * @param year yyyy
  * @param month mm
  */
-export const getInOut = async (uifId: number, year: string, month: string) => {
+export const getInOut = async (
+  uifId: number,
+  year: string,
+  month: string
+): Promise<AxiosResponse<GetInOutUserReportResponse>> => {
   const url = `${VERSION_URL}/inout/users/${uifId}/records/${year}/${month}`;
   return request.get<GetInOutUserReportResponse>(url);
 };

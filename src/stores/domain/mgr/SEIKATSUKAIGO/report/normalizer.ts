@@ -164,8 +164,8 @@ const convertParamByStatus = (
     inTime: "",
     outTime: "",
     extended: "0",
-    didGetFood: "0",
-    travelTime: "0",
+    didGetFood: "0" as string | null,
+    travelTime: "0" as string | null,
     pickupPremises: "0",
     memo: "",
     severeDisabilitySupport: 0 as number | null
@@ -173,6 +173,11 @@ const convertParamByStatus = (
 
   // サービス提供の状況確認、不要項目の初期化
   switch (value.status) {
+    case 1:
+      // 食事・送迎にnullを設定するとAPIから利用者情報のデフォルト値が返ってくる
+      initialValue.didGetFood = null;
+      initialValue.travelTime = null;
+      break;
     case 2:
       initialValue.inTime = value.inTime ? value.inTime : initialValue.inTime;
       initialValue.outTime = value.outTime
@@ -214,19 +219,22 @@ const convertParamByStatus = (
       break;
     default:
   }
-  value.inTime = initialValue.inTime;
-  value.outTime = initialValue.outTime;
-  value.extended = initialValue.extended;
-  value.didGetFood = initialValue.didGetFood;
-  value.travelTime = initialValue.travelTime;
-  value.pickupPremises = initialValue.pickupPremises;
-  value.trialUsageKind = initialValue.trialUsageKind;
-  value.lifeSupportHubInDistrictFlg = initialValue.lifeSupportHubInDistrictFlg;
-  value.severeDisabilitySupport = initialValue.severeDisabilitySupport;
-  // 備考は全サービス提供で必須送信項目の為、switch外で処理
-  value.memo =
-    value.memo && !isEmpty(value.memo) ? value.memo : initialValue.memo;
-  return value;
+
+  const returnValue: SEIKATSUKAIGOReport = {
+    ...value,
+    inTime: initialValue.inTime,
+    outTime: initialValue.outTime,
+    extended: initialValue.extended,
+    didGetFood: initialValue.didGetFood,
+    travelTime: initialValue.travelTime,
+    pickupPremises: initialValue.pickupPremises,
+    trialUsageKind: initialValue.trialUsageKind,
+    lifeSupportHubInDistrictFlg: initialValue.lifeSupportHubInDistrictFlg,
+    severeDisabilitySupport: initialValue.severeDisabilitySupport,
+    // 備考は全サービス提供で必須送信項目の為、switch外で処理
+    memo: value.memo && !isEmpty(value.memo) ? value.memo : initialValue.memo
+  };
+  return returnValue;
 };
 
 const createResultInOutRecord = (
@@ -292,7 +300,7 @@ const removeNoChangeData = (
   let resultAfter = {} as SEIKATSUKAIGOReport;
   let resultBefore = {} as SEIKATSUKAIGOReport;
   // 差分の行を抽出
-  afterList.map(function (after, idx) {
+  afterList.map((after, idx) => {
     if (!deepEqual(after, beforeList[idx])) {
       resultAfter = after;
       resultBefore = beforeList[idx];
@@ -307,8 +315,8 @@ const removeNoChangeData = (
   const differenceObject: RequestParam["otherParam"] = {
     status: resultAfter.status,
     restTime: 60,
-    didGetFood: resultAfter.didGetFood ? resultAfter.didGetFood : "0",
-    travelTime: resultAfter.travelTime ? resultAfter.travelTime : "0",
+    didGetFood: resultAfter.didGetFood ? resultAfter.didGetFood : null,
+    travelTime: resultAfter.travelTime ? resultAfter.travelTime : null,
     pickupPremises: resultAfter.pickupPremises
       ? resultAfter.pickupPremises
       : "0",
@@ -519,7 +527,7 @@ export const addChangedDataToReportList = (
   values: InitialDataValues,
   reportList: SEIKATSUKAIGOReport[],
   type: SEIKATSUKAIGOReportTypeInterface["type"]
-): any => {
+): SEIKATSUKAIGOReport[] => {
   const result = JSON.parse(JSON.stringify(reportList));
   Object.keys(reportList).forEach((key) => {
     if (

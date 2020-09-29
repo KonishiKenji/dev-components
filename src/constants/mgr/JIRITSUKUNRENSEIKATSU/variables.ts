@@ -44,7 +44,7 @@ export enum supportForMentallyIllDisChargeSystemTypes {
 // inOutRecordsのサービス提供状況
 export enum JIRITSUKUNREN_IN_OUT_RECORDS_STATUS {
   // -
-  NONE = "0",
+  NONE = "1",
   // 通所
   USUAL_PLACE = "2",
   // 欠席時対応

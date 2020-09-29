@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -24,7 +25,7 @@ export const postUsageResultsMonthly = async (
   values: PostUsageResultsParam,
   uifId: string,
   date: string
-) => {
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/usage_results/monthly/${uifId}/${date}`;
   return request.post(url, values);
 };

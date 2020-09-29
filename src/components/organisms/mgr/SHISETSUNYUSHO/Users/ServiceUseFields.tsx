@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core";
+import { StyleRules } from "@material-ui/core/styles";
 import { FormikProps } from "formik";
 import Typography from "@material-ui/core/Typography";
 import FormGroup from "@material-ui/core/FormGroup";
@@ -11,6 +12,7 @@ import FormikCheckbox from "@components/molecules/FormikCheckbox";
 import FormikSwitch from "@components/molecules/FormikSwitch";
 import FormikRadioButtons from "@components/molecules/FormikRadioButtons";
 import FormikSelectDateNotSelectedDefault from "@components/molecules/FormikSelectDateNotSelectedDefault";
+import SubsidizedFields from "@components/organisms/mgr/common/Users/items/SubsidizedFields";
 import HelpToolTip from "@components/atoms/HelpToolTip";
 import HelpTipMessages from "@components/molecules/HelpTipMessages";
 import { FacilityState } from "@stores/domain/mgr/SHISETSUNYUSHO/facility/types";
@@ -24,7 +26,11 @@ import {
 } from "@constants/variables";
 import { UsersValues } from "@initialize/mgr/SHISETSUNYUSHO/users/initialValues";
 
-const styles = () =>
+const Tooltip = (
+  <HelpToolTip title={<HelpTipMessages name="severeDisabilitySupportFlag" />} />
+);
+
+const styles = (): StyleRules =>
   createStyles({
     groupDate: {
       marginLeft: 16
@@ -94,12 +100,25 @@ interface State {
 }
 
 class ServiceUseFields extends React.Component<Props, State> {
-  public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      shouldFirstSetup: true,
+      showIncomeKindType: true,
+      showUpperLimitTotalYenAndUserLoadYen: true,
+      showUpperLimitYen: false
+    };
+  }
+
+  public static getDerivedStateFromProps(
+    nextProps: Props,
+    prevState: State
+  ): State | null {
     if (!prevState.shouldFirstSetup || !nextProps.isFetchDone) {
       return null;
     }
 
-    const serviceUse = nextProps.formikProps.values.serviceUse;
+    const { serviceUse } = nextProps.formikProps.values;
     return {
       shouldFirstSetup: false,
       showIncomeKindType: serviceUse.incomeKind === "1",
@@ -109,14 +128,37 @@ class ServiceUseFields extends React.Component<Props, State> {
     };
   }
 
-  public state = {
-    shouldFirstSetup: true,
-    showIncomeKindType: true,
-    showUpperLimitTotalYenAndUserLoadYen: true,
-    showUpperLimitYen: false
+  /**
+   * 負担上限額が1の時、所得区分を表示
+   */
+  private onChangeIncomeKindHook = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showIncomeKindType: value === "1" });
   };
 
-  public render() {
+  /**
+   * 管理事業所が1の時、総費用額と利用者負担額を表示
+   */
+  private onChangeUpperLimitControlledBy = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showUpperLimitTotalYenAndUserLoadYen: value === "1" });
+  };
+
+  /**
+   * 管理結果が3の時、自事業所調整上限額を表示
+   */
+  private onChangeResultOfManagement = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showUpperLimitYen: value === "3" });
+  };
+
+  public render(): JSX.Element {
     const START_ADD_YEAR_TO = 1;
     const END_ADD_YEAR_TO = 5;
     return (
@@ -131,7 +173,7 @@ class ServiceUseFields extends React.Component<Props, State> {
           <FormikSelectDateNotSelectedDefault
             name="serviceUse.inServiceStartDate"
             label="サービス提供開始日"
-            required={true}
+            required
             style={{ marginBottom: 12 }}
             addYearTo={START_ADD_YEAR_TO}
             setFormikFieldValue={this.props.setFormikFieldValue}
@@ -148,7 +190,7 @@ class ServiceUseFields extends React.Component<Props, State> {
           <FormikSelectDateNotSelectedDefault
             name="serviceUse.payStartDate"
             label="支給決定開始日 "
-            required={true}
+            required
             style={{ marginBottom: 12 }}
             addYearTo={START_ADD_YEAR_TO}
             setFormikFieldValue={this.props.setFormikFieldValue}
@@ -156,7 +198,7 @@ class ServiceUseFields extends React.Component<Props, State> {
           <FormikSelectDateNotSelectedDefault
             name="serviceUse.payEndDate"
             label="支給決定終了日"
-            required={true}
+            required
             addYearTo={END_ADD_YEAR_TO}
             setFormikFieldValue={this.props.setFormikFieldValue}
           />
@@ -171,18 +213,14 @@ class ServiceUseFields extends React.Component<Props, State> {
             <FormikSwitch
               name="serviceUse.severeDisabilitySupport"
               label="重度障害者支援の個別支援対象者である"
-              tooltip={
-                <HelpToolTip
-                  title={<HelpTipMessages name="severeDisabilitySupportFlag" />}
-                />
-              }
+              tooltip={Tooltip}
             >
               <FormikSelectDateNotSelectedDefault
                 name="serviceUse.severeDisabilitySupportStartData"
                 label="加算算定開始日"
                 addYearTo={START_ADD_YEAR_TO}
                 setFormikFieldValue={this.props.setFormikFieldValue}
-                required={true}
+                required
               />
             </FormikSwitch>
           )}
@@ -204,6 +242,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             )}
           </div>
         </div>
+        <SubsidizedFields formikProps={this.props.formikProps} />
         <FormikSwitch
           name="serviceUse.supplementaryBenefitFlg"
           label="補足給付"
@@ -212,7 +251,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             <FormikTextField
               name="serviceUse.supplementaryBenefitYen"
               label="補足給付金額"
-              required={true}
+              required
               endAdornmentLabel="円"
               maxLength={6}
             />
@@ -229,21 +268,21 @@ class ServiceUseFields extends React.Component<Props, State> {
               options={UPLIMIT_CONT_ROLLED_BY_LIST}
               onChangeHook={this.onChangeUpperLimitControlledBy}
             />
-            <FormGroup row={true}>
+            <FormGroup row>
               <FormikTextField
                 name="serviceUse.upperLimitFacilityNumber"
                 label="事業所番号"
-                required={true}
+                required
                 maxLength={10}
               />
               <FormikTextField
                 name="serviceUse.upperLimitFacilityName"
                 label="事業所名"
-                required={true}
+                required
               />
             </FormGroup>
             {this.state.showUpperLimitTotalYenAndUserLoadYen && (
-              <FormGroup row={true}>
+              <FormGroup row>
                 <FormikTextField
                   name="serviceUse.upperLimitTotalYen"
                   label="総費用額"
@@ -269,7 +308,7 @@ class ServiceUseFields extends React.Component<Props, State> {
               <FormikTextField
                 name="serviceUse.upperLimitYen"
                 label="自事業所調整上限額"
-                required={true}
+                required
                 endAdornmentLabel="円"
                 style={{ marginTop: 32 }}
                 maxLength={11}
@@ -285,7 +324,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             <FormikSelectDateNotSelectedDefault
               name="serviceUse.notCreateSupportPlanStartDate"
               label="未作成期間開始日"
-              required={true}
+              required
               style={{ marginBottom: 0 }}
               addYearTo={START_ADD_YEAR_TO}
               setFormikFieldValue={this.props.setFormikFieldValue}
@@ -298,7 +337,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             <span className={this.props.classes.default}>デフォルト</span>
             <span className={this.props.classes.option}>※</span>
           </Typography>
-          <FormGroup row={true}>
+          <FormGroup row>
             <FormikSelect
               name="serviceUse.defFood"
               label=""
@@ -349,36 +388,6 @@ class ServiceUseFields extends React.Component<Props, State> {
       </FormPaper>
     );
   }
-
-  /**
-   * 負担上限額が1の時、所得区分を表示
-   */
-  private onChangeIncomeKindHook = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showIncomeKindType: value === "1" });
-  };
-
-  /**
-   * 管理事業所が1の時、総費用額と利用者負担額を表示
-   */
-  private onChangeUpperLimitControlledBy = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showUpperLimitTotalYenAndUserLoadYen: value === "1" });
-  };
-
-  /**
-   * 管理結果が3の時、自事業所調整上限額を表示
-   */
-  private onChangeResultOfManagement = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showUpperLimitYen: value === "3" });
-  };
 }
 
 export default withStyles(styles)(ServiceUseFields);

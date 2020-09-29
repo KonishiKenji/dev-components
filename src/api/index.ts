@@ -3,17 +3,24 @@ import { getToken } from "@utils/localStorage";
 import { BASE_URL } from "@config";
 
 axios.defaults.headers.common["Content-Type"] = "application/json";
-const debug = process.env.NODE_ENV !== "production";
+const debug = process.env.REACT_APP_ENV !== "production";
 
-const onSuccess = async <T = any>(data: AxiosResponse<T>) => {
+const onSuccess = async <T>(
+  data: AxiosResponse<T>
+): Promise<AxiosResponse<T>> => {
+  // eslint-disable-next-line
   if (debug) console.log("onSuccess << data", data);
   return Promise.resolve<AxiosResponse<T>>(data);
 };
-const onSuccessAll = async <T = any>(data: AxiosResponse<T>[]) => {
+const onSuccessAll = async <T>(
+  data: AxiosResponse<T>[]
+): Promise<AxiosResponse<T>[]> => {
+  // eslint-disable-next-line
   if (debug) console.log("onSuccess << data", data);
   return Promise.resolve<AxiosResponse<T>[]>(data);
 };
-const onError = async (error: AxiosError) => {
+const onError = async (error: AxiosError): Promise<never> => {
+  // eslint-disable-next-line
   if (debug) console.log("onError << error", error);
   return Promise.reject(error);
 };
@@ -40,21 +47,26 @@ const margeParam = (params: AxiosRequestConfig): AxiosRequestConfig => {
 };
 
 export default {
-  get: async <T = any>(url: string, params?: AxiosRequestConfig) => {
+  get: async <T>(
+    url: string,
+    params?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> => {
     const targetUrl = `${BASE_URL}${url}`;
+    // eslint-disable-next-line
     if (debug) console.log(`GET ${targetUrl} >> ${JSON.stringify(params)}`);
     return axios
       .get<T>(targetUrl, margeParam(params || {}))
       .then(onSuccess)
       .catch(onError);
   },
-  post: async <T = any, D = any>(
+  post: async <T, D>(
     url: string,
     data?: D,
     params?: AxiosRequestConfig
-  ) => {
+  ): Promise<AxiosResponse<T>> => {
     const targetUrl = `${BASE_URL}${url}`;
     if (debug) {
+      // eslint-disable-next-line
       console.log(
         `POST ${targetUrl} >> ${JSON.stringify({ params, data: data || {} })}`
       );
@@ -64,18 +76,19 @@ export default {
       .then(onSuccess)
       .catch(onError);
   },
-  postAll: async <T = any, D = any>(
+  postAll: async <T, D>(
     posts: {
       url: string;
       data?: D;
       params?: AxiosRequestConfig;
     }[]
-  ) => {
+  ): Promise<AxiosResponse<T>[]> => {
     return axios
       .all(
         posts.map(({ url, data, params }) => {
           const targetUrl = `${BASE_URL}${url}`;
           if (debug) {
+            // eslint-disable-next-line
             console.log(
               `POST ALL ${targetUrl} >> ${JSON.stringify({
                 params,
@@ -89,13 +102,14 @@ export default {
       .then(onSuccessAll)
       .catch(onError);
   },
-  put: async <T = any, D = any>(
+  put: async <T, D>(
     url: string,
     data?: D,
     params?: AxiosRequestConfig
-  ) => {
+  ): Promise<AxiosResponse<T>> => {
     const targetUrl = `${BASE_URL}${url}`;
     if (debug) {
+      // eslint-disable-next-line
       console.log(
         `PUT ${targetUrl} >> ${JSON.stringify({ params, data: data || {} })}`
       );
@@ -105,8 +119,12 @@ export default {
       .then(onSuccess)
       .catch(onError);
   },
-  delete: async (url: string, params?: AxiosRequestConfig) => {
+  delete: async <T>(
+    url: string,
+    params?: AxiosRequestConfig
+  ): Promise<AxiosResponse<T>> => {
     const targetUrl = `${BASE_URL}${url}`;
+    // eslint-disable-next-line
     if (debug) console.log(`DELETE ${targetUrl} >> ${JSON.stringify(params)}`);
     return axios
       .delete(targetUrl, margeParam(params || {}))

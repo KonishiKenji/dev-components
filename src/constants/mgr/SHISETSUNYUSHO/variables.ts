@@ -210,29 +210,30 @@ export const STAFF_TREATMENT_SPECIFIC_SYSTEM_LIST: OptionInterface[] = [
 ];
 
 // 登録できる項目一覧
-export enum BulkRegistrationItemList {
-  STATUS_TYPE = "statusType",
-  HOSPITALIZATION_OVERNIGHTSTAY = "hospitalizationOvernightstay",
-  REGIONAL_TRANSITION = "regionalTransition",
-  COLLECTION_OF_UTILITY_FEE = "collectionOfUtilityFee",
-  FOOD_BREAKFAST = "foodBreakfast",
-  FOOD_LUNCH = "foodLunch",
-  FOOD_SUPPER = "foodSupper"
-}
+export const BulkRegistrationItemList = {
+  STATUS_TYPE: "statusType",
+  HOSPITALIZATION_OVERNIGHTSTAY: "hospitalizationOvernightstay",
+  REGIONAL_TRANSITION: "regionalTransition",
+  COLLECTION_OF_UTILITY_FEE: "collectionOfUtilityFee",
+  FOOD_BREAKFAST: "foodBreakfast",
+  FOOD_LUNCH: "foodLunch",
+  FOOD_SUPPER: "foodSupper"
+} as const;
+export type BulkRegistrationItemList = typeof BulkRegistrationItemList[keyof typeof BulkRegistrationItemList];
 
 // usagePerformance項目一覧
-export const USAGE_PERFORMANCE_ITEM_LIST = [
-  `${BulkRegistrationItemList.STATUS_TYPE}`
+export const USAGE_PERFORMANCE_ITEM_LIST: BulkRegistrationItemList[] = [
+  BulkRegistrationItemList.STATUS_TYPE
 ];
 
 // usagePerformanceSHISETSUNYUSHO項目一覧
-export const USAGE_PERFORMANCE_SHISETSUNYUSHO_ITEM_LIST = [
-  `${BulkRegistrationItemList.HOSPITALIZATION_OVERNIGHTSTAY}`,
-  `${BulkRegistrationItemList.REGIONAL_TRANSITION}`,
-  `${BulkRegistrationItemList.COLLECTION_OF_UTILITY_FEE}`,
-  `${BulkRegistrationItemList.FOOD_BREAKFAST}`,
-  `${BulkRegistrationItemList.FOOD_LUNCH}`,
-  `${BulkRegistrationItemList.FOOD_SUPPER}`
+export const USAGE_PERFORMANCE_SHISETSUNYUSHO_ITEM_LIST: BulkRegistrationItemList[] = [
+  BulkRegistrationItemList.HOSPITALIZATION_OVERNIGHTSTAY,
+  BulkRegistrationItemList.REGIONAL_TRANSITION,
+  BulkRegistrationItemList.COLLECTION_OF_UTILITY_FEE,
+  BulkRegistrationItemList.FOOD_BREAKFAST,
+  BulkRegistrationItemList.FOOD_LUNCH,
+  BulkRegistrationItemList.FOOD_SUPPER
 ];
 
 // storeのkey名とselectBoxのkey名の関連付け

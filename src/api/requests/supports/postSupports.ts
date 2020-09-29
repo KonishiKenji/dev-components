@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -35,7 +36,10 @@ export interface PostSupportsParams {
  * @param uifId 事業所所属ユーザーのID
  * @param params 更新データ
  */
-const postSupports = async (uifId: string, params: PostSupportsParams) => {
+const postSupports = async (
+  uifId: string,
+  params: PostSupportsParams
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/supports/users/${uifId}`;
   return request.post(url, params);
 };

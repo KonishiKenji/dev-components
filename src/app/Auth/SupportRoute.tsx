@@ -2,24 +2,18 @@ import * as React from "react";
 import { Route, RouteProps } from "react-router-dom";
 import { connect } from "react-redux";
 import { UserState } from "@stores/domain/user/type";
+import { AppState } from "@stores/type";
 import NoMatch from "@components/pages/error/NoMatch";
 
-interface OwnProps {
-  groupInvoiceCheck?: boolean;
-}
 interface StateProps {
   user: UserState;
 }
-type Props = OwnProps & StateProps & RouteProps;
+type Props = StateProps & RouteProps;
 
 /**
  * サポートだけ表示
  */
-const SupportRoute: React.FunctionComponent<Props> = ({
-  user,
-  groupInvoiceCheck,
-  ...props
-}) => {
+const SupportRoute: React.FunctionComponent<Props> = ({ user, ...props }) => {
   if (!user.done) {
     return <div />;
   }
@@ -31,8 +25,8 @@ const SupportRoute: React.FunctionComponent<Props> = ({
   );
 };
 
-const mapStateToProps = (state: any): StateProps => ({
+const mapStateToProps = (state: AppState): StateProps => ({
   user: state.user
 });
 
-export default connect<StateProps>(mapStateToProps)(SupportRoute);
+export default connect(mapStateToProps)(SupportRoute);

@@ -1,16 +1,15 @@
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import request from "@api/index";
 import { COMMON_VERSION_URL } from "@config";
 import { NewAccountParams } from "@stores/domain/account/type";
-import { AxiosRequestConfig } from "axios";
 
 /**
  * アカウントの新規登録
- * @param data
  */
 export const postActivate = async (
   data: NewAccountParams,
   verificationToken: string
-) => {
+): Promise<AxiosResponse<unknown>> => {
   const requestParams: AxiosRequestConfig = {
     headers: {
       "VERIFICATION-TOKEN": verificationToken

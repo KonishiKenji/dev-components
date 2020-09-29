@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -17,7 +18,7 @@ export interface GetStaffResponse {
 /**
  * ログインユーザに紐づく職員情報を取得する
  */
-export const getStaff = async () => {
+export const getStaff = async (): Promise<AxiosResponse<GetStaffResponse>> => {
   const url = `${VERSION_URL}/staffs`;
   return request.get<GetStaffResponse>(url);
 };

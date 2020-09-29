@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -63,7 +64,7 @@ export type PostUsagePerformanceSHISETSUNYUSHODailyParam = NonNullable<
 
 export const postUsagePerformanceDaily = async (
   values: PostUsagePerformanceDailyParams
-) => {
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/usage_performance/daily/set`;
   return request.post(url, values);
 };

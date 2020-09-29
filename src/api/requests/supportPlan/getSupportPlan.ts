@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -58,7 +59,9 @@ export interface GetSupportPlanResponse {
  * 個別支援計画のデータ取得
  * @param uifId 事業所所属ユーザーのID
  */
-const getSupportPlan = async (uifId: string) => {
+const getSupportPlan = async (
+  uifId: string
+): Promise<AxiosResponse<GetSupportPlanResponse>> => {
   const url = `${VERSION_URL}/support_plan/${uifId}`;
   return request.get<GetSupportPlanResponse>(url);
 };

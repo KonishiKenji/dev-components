@@ -51,11 +51,12 @@ const styles = createStyles({
       width: "100%"
     },
     "&  td": {
-      padding: "3px 7px",
+      padding: "3px 4px",
       borderRight: "1px solid",
       fontSize: 11,
       letterSpacing: 0.6,
       color: "rgba(0, 0, 0, 0.84)",
+      wordBreak: "break-all",
       "&.label": {
         textAlign: "center"
       },
@@ -72,7 +73,7 @@ const styles = createStyles({
         height: 300
       },
       "&.ssize": {
-        width: 80
+        width: 90
       },
       "&.msize": {
         width: 120

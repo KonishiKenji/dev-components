@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import dispatches from "@stores/dispatches";
 import { createStyles, WithStyles } from "@material-ui/core";
-import { withStyles } from "@material-ui/core/styles";
+import { StyleRules, withStyles } from "@material-ui/core/styles";
 import TableCellWrap from "@components/atoms/TableCellWrap";
 import {
   SupplyFoodsServiceList,
@@ -43,7 +43,7 @@ import { AppState } from "@stores/type";
 import DropDown from "@components/atoms/DropDown";
 import { REPEAT_MONTHLY } from "@stores/domain/report/type";
 
-const styles = () =>
+const styles = (): StyleRules =>
   createStyles({
     dropDownStyle: {
       margin: 0,
@@ -132,188 +132,13 @@ interface DispatchProps {
 type Props = OwnProps & WithStyles<typeof styles> & DispatchProps & StateProps;
 
 class UsagePerformanceReportCellEdit extends React.Component<Props> {
-  public render() {
-    const {
-      idx,
-      usagePerformance,
-      usagePerformanceTANKINYUSHO,
-      classes
-    } = this.props;
-
-    // サービス提供状況が[-]かどうかの判定
-    const isStatusNone = `${usagePerformance.statusType}` === StatusType.NONE;
-
-    return (
-      <>
-        {/* サービス提供の状況 */}
-        <TableCellWrap key={`${idx}-status-type`} cellClass={classes.cell}>
-          <DropDown
-            id={`${idx}-status-type-drop-down`}
-            key={`${idx}-status-type-drop-down`}
-            options={STATUS_TYPE}
-            onChange={this.changeSelect}
-            value={`${usagePerformance.statusType}`}
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.STATUS_TYPE }}
-            classes={{ dropDown: classes.dropDownStyle }}
-          />
-        </TableCellWrap>
-
-        {/* 生活介護または指定通所支援等を実施 */}
-        <TableCellWrap
-          key={`${idx}-other-support`}
-          cellClass={classes.otherSupportCell}
-        >
-          <DropDown
-            id={`${idx}-other-support-drop-down`}
-            key={`${idx}-other-support-drop-down`}
-            options={OTHER_SUPPORT}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceTANKINYUSHO
-                ? `${usagePerformanceTANKINYUSHO.otherSupport}`
-                : OtherSupport.NONE
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.OTHER_SUPPORT }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-          />
-        </TableCellWrap>
-
-        {/* 食事提供 */}
-        <TableCellWrap key={`${idx}-food`} cellClass={classes.cell}>
-          <DropDown
-            id={`${idx}-food-drop-down`}
-            key={`${idx}-food-drop-down`}
-            options={SUPPLY_FOOD_SERVICE_LIST}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceTANKINYUSHO
-                ? `${usagePerformanceTANKINYUSHO.food}`
-                : SupplyFoodsServiceList["-"]
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.FOOD }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-          />
-        </TableCellWrap>
-
-        {/* 送迎 */}
-        <TableCellWrap key={`${idx}-pick-up`} cellClass={classes.cell}>
-          <DropDown
-            id={`${idx}-pick-up-drop-down`}
-            key={`${idx}-pick-up-drop-down`}
-            options={SUPPLY_PICKUP_SERVICE_LIST}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceTANKINYUSHO
-                ? `${usagePerformanceTANKINYUSHO.pickup}`
-                : SupplyPickupServiceList.NONE
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.PICK_UP }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-          />
-        </TableCellWrap>
-
-        {/* 同一敷地内 */}
-        <TableCellWrap
-          key={`${idx}-pick-up-premises`}
-          cellClass={classes.pickupPremiseCell}
-        >
-          <DropDown
-            id={`${idx}-pick-up-premises-drop-down`}
-            key={`${idx}-pick-up-premises-drop-down`}
-            options={this.changePickupPremisesState(
-              this.props.usagePerformanceTANKINYUSHO.pickup
-            )}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceTANKINYUSHO
-                ? `${usagePerformanceTANKINYUSHO.pickupPremises}`
-                : PickupPremiseList.NONE
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.PICK_UP_PREMISE }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={
-              isStatusNone ||
-              this.props.usagePerformanceTANKINYUSHO.pickup === 0
-            }
-          />
-        </TableCellWrap>
-
-        {/* 緊急短期入所受入 */}
-        <TableCellWrap
-          key={`${idx}-emergency-shortitem-flg`}
-          cellClass={classes.cell}
-        >
-          <DropDown
-            id={`${idx}-emergency-shortitem-flg-drop-down`}
-            key={`${idx}-emergency-shortitem-flg-drop-down`}
-            options={EMERGENCY_SHORTTERM}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceTANKINYUSHO
-                ? `${usagePerformanceTANKINYUSHO.emergencyShortterm}`
-                : EmergencyShortterm.NONE
-            }
-            helperText={""}
-            InputProps={{
-              name: BulkRegistrationItemList.EMERGENCY_SHORTTERM
-            }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-          />
-        </TableCellWrap>
-
-        {/* 単独型18時間以上 */}
-        <TableCellWrap key={`${idx}-over-hours-flg`} cellClass={classes.cell}>
-          <DropDown
-            id={`${idx}-over-hours-flg-drop-down`}
-            key={`${idx}-over-hours-flg-drop-down`}
-            options={OVER_HOURS}
-            onChange={this.changeSelect}
-            value={
-              usagePerformanceTANKINYUSHO
-                ? `${usagePerformanceTANKINYUSHO.overHours}`
-                : OverHours.NONE
-            }
-            helperText={""}
-            InputProps={{ name: BulkRegistrationItemList.OVER_HOURS }}
-            classes={{ dropDown: classes.dropDownStyle }}
-            isDisabled={isStatusNone}
-          />
-        </TableCellWrap>
-
-        {/* 編集ボタン */}
-        <TableCellWrap
-          key={`${idx}-edit-icon`}
-          cellClass={classes.editCell}
-          align={"right"}
-        >
-          <Edit
-            style={{
-              width: 18,
-              height: 18,
-              color: "#0277bd",
-              cursor: "pointer"
-            }}
-            onClick={this.openModal}
-          />
-        </TableCellWrap>
-      </>
-    );
-  }
-
   /**
    * 同一敷地内の選択肢変更イベント
    */
-  private changePickupPremisesState = (pickupValue: number) => {
-    let pickupPremisesList = SUPPLY_PICKUP_PREMISES_SERVICE_LIST0;
+  private changePickupPremisesState = (
+    pickupValue: number
+  ): { label: string; value: string }[] => {
+    let pickupPremisesList;
     switch (pickupValue) {
       case 1:
         pickupPremisesList = SUPPLY_PICKUP_PREMISES_SERVICE_LIST1;
@@ -324,6 +149,8 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
       case 3:
         pickupPremisesList = SUPPLY_PICKUP_PREMISES_SERVICE_LIST3;
         break;
+      default:
+        pickupPremisesList = SUPPLY_PICKUP_PREMISES_SERVICE_LIST0;
     }
     return pickupPremisesList;
   };
@@ -356,35 +183,30 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
   private changeSelectDaily = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    if (USAGE_PERFORMANCE_ITEM_LIST.includes(event.target.name)) {
+    const targetName = event.target.name as BulkRegistrationItemList;
+    const targetValue = event.target.value;
+    const { keyValue } = this.props;
+
+    if (USAGE_PERFORMANCE_ITEM_LIST.includes(targetName)) {
       // 変更が無ければ何もしない
-      if (
-        this.notUpdateUsagePerformance(event.target.name, event.target.value)
-      ) {
+      if (this.notUpdateUsagePerformance(targetName, targetValue)) {
         return;
       }
       this.props.updateTANKINYUSHOUsagePerformanceItemsDaily(
-        event.target.name,
-        event.target.value,
-        this.props.keyValue,
+        targetName,
+        targetValue,
+        keyValue,
         this.props.reportState.reportDaily.usagePerformance.after
       );
-    } else if (
-      USAGE_PERFORMANCE_TANKINYUSHO_ITEM_LIST.includes(event.target.name)
-    ) {
+    } else if (USAGE_PERFORMANCE_TANKINYUSHO_ITEM_LIST.includes(targetName)) {
       // 変更がなければ何もしない
-      if (
-        this.notUpdateUsagePerformanceTANKINYUSHO(
-          event.target.name,
-          event.target.value
-        )
-      ) {
+      if (this.notUpdateUsagePerformanceTANKINYUSHO(targetName, targetValue)) {
         return;
       }
       this.props.updateTANKINYUSHOUsagePerformanceTANKINYUSHOItemsDaily(
-        event.target.name,
-        event.target.value,
-        this.props.keyValue,
+        targetName,
+        targetValue,
+        keyValue,
         this.props.reportState.reportDaily.usagePerformanceTANKINYUSHO.after
       );
     }
@@ -396,39 +218,35 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
   private changeSelectMonthly = (
     event: React.ChangeEvent<HTMLInputElement>
   ): void => {
-    if (USAGE_PERFORMANCE_ITEM_LIST.includes(event.target.name)) {
+    const targetName = event.target.name as BulkRegistrationItemList;
+    const targetValue = event.target.value;
+    const { keyValue } = this.props;
+
+    if (USAGE_PERFORMANCE_ITEM_LIST.includes(targetName)) {
       // 変更が無ければ何もしない
-      if (
-        this.notUpdateUsagePerformance(event.target.name, event.target.value)
-      ) {
+      if (this.notUpdateUsagePerformance(targetName, targetValue)) {
         return;
       }
       this.props.updateTANKINYUSHOUsagePerformanceItemsMonthly(
-        event.target.name,
-        event.target.value,
-        this.props.keyValue,
+        targetName,
+        targetValue,
+        keyValue,
         this.props.reportState.reportMonthly.usagePerformance.after
       );
-    } else if (
-      USAGE_PERFORMANCE_TANKINYUSHO_ITEM_LIST.includes(event.target.name)
-    ) {
+    } else if (USAGE_PERFORMANCE_TANKINYUSHO_ITEM_LIST.includes(targetName)) {
       // 変更がなければ何もしない
-      if (
-        this.notUpdateUsagePerformanceTANKINYUSHO(
-          event.target.name,
-          event.target.value
-        )
-      ) {
+      if (this.notUpdateUsagePerformanceTANKINYUSHO(targetName, targetValue)) {
         return;
       }
       this.props.updateTANKINYUSHOUsagePerformanceTANKINYUSHOItemsMonthly(
-        event.target.name,
-        event.target.value,
-        this.props.keyValue,
+        targetName,
+        targetValue,
+        keyValue,
         this.props.reportState.reportMonthly.usagePerformanceTANKINYUSHO.after
       );
     }
   };
+
   /**
    * usagePerformanceの値更新チェック
    */
@@ -464,12 +282,216 @@ class UsagePerformanceReportCellEdit extends React.Component<Props> {
           }`
       : false;
   };
+
+  public render(): JSX.Element {
+    const {
+      idx,
+      usagePerformance,
+      usagePerformanceTANKINYUSHO,
+      classes
+    } = this.props;
+
+    // サービス提供状況が[-]かどうかの判定
+    const isStatusNone = `${usagePerformance.statusType}` === StatusType.NONE;
+
+    return (
+      <>
+        {/* サービス提供の状況 */}
+        <TableCellWrap key={`${idx}-status-type`} cellClass={classes.cell}>
+          <DropDown
+            id={`${idx}-status-type-drop-down`}
+            key={`${idx}-status-type-drop-down`}
+            options={STATUS_TYPE}
+            onChange={this.changeSelect}
+            value={`${usagePerformance.statusType}`}
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.STATUS_TYPE }}
+            classes={{ dropDown: classes.dropDownStyle }}
+          />
+        </TableCellWrap>
+
+        {/* 生活介護または指定通所支援等を実施 */}
+        <TableCellWrap
+          key={`${idx}-other-support`}
+          cellClass={classes.otherSupportCell}
+        >
+          <DropDown
+            id={`${idx}-other-support-drop-down`}
+            key={`${idx}-other-support-drop-down`}
+            options={OTHER_SUPPORT}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceTANKINYUSHO
+                ? `${usagePerformanceTANKINYUSHO.otherSupport}`
+                : OtherSupport.NONE
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.OTHER_SUPPORT }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+          />
+        </TableCellWrap>
+
+        {/* 食事提供 */}
+        <TableCellWrap key={`${idx}-food`} cellClass={classes.cell}>
+          <DropDown
+            id={`${idx}-food-drop-down`}
+            key={`${idx}-food-drop-down`}
+            options={SUPPLY_FOOD_SERVICE_LIST}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceTANKINYUSHO
+                ? `${usagePerformanceTANKINYUSHO.food}`
+                : SupplyFoodsServiceList["-"]
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.FOOD }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+          />
+        </TableCellWrap>
+
+        {/* 送迎 */}
+        <TableCellWrap key={`${idx}-pick-up`} cellClass={classes.cell}>
+          <DropDown
+            id={`${idx}-pick-up-drop-down`}
+            key={`${idx}-pick-up-drop-down`}
+            options={SUPPLY_PICKUP_SERVICE_LIST}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceTANKINYUSHO
+                ? `${usagePerformanceTANKINYUSHO.pickup}`
+                : SupplyPickupServiceList.NONE
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.PICK_UP }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+          />
+        </TableCellWrap>
+
+        {/* 同一敷地内 */}
+        <TableCellWrap
+          key={`${idx}-pick-up-premises`}
+          cellClass={classes.pickupPremiseCell}
+        >
+          <DropDown
+            id={`${idx}-pick-up-premises-drop-down`}
+            key={`${idx}-pick-up-premises-drop-down`}
+            options={this.changePickupPremisesState(
+              this.props.usagePerformanceTANKINYUSHO.pickup
+            )}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceTANKINYUSHO
+                ? `${usagePerformanceTANKINYUSHO.pickupPremises}`
+                : PickupPremiseList.NONE
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.PICK_UP_PREMISE }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={
+              isStatusNone ||
+              this.props.usagePerformanceTANKINYUSHO.pickup === 0
+            }
+          />
+        </TableCellWrap>
+
+        {/* 緊急短期入所受入 */}
+        <TableCellWrap
+          key={`${idx}-emergency-shortitem-flg`}
+          cellClass={classes.cell}
+        >
+          <DropDown
+            id={`${idx}-emergency-shortitem-flg-drop-down`}
+            key={`${idx}-emergency-shortitem-flg-drop-down`}
+            options={EMERGENCY_SHORTTERM}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceTANKINYUSHO
+                ? `${usagePerformanceTANKINYUSHO.emergencyShortterm}`
+                : EmergencyShortterm.NONE
+            }
+            helperText=""
+            InputProps={{
+              name: BulkRegistrationItemList.EMERGENCY_SHORTTERM
+            }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+          />
+        </TableCellWrap>
+
+        {/* 単独型18時間以上 */}
+        <TableCellWrap key={`${idx}-over-hours-flg`} cellClass={classes.cell}>
+          <DropDown
+            id={`${idx}-over-hours-flg-drop-down`}
+            key={`${idx}-over-hours-flg-drop-down`}
+            options={OVER_HOURS}
+            onChange={this.changeSelect}
+            value={
+              usagePerformanceTANKINYUSHO
+                ? `${usagePerformanceTANKINYUSHO.overHours}`
+                : OverHours.NONE
+            }
+            helperText=""
+            InputProps={{ name: BulkRegistrationItemList.OVER_HOURS }}
+            classes={{ dropDown: classes.dropDownStyle }}
+            isDisabled={isStatusNone}
+          />
+        </TableCellWrap>
+
+        {/* 編集ボタン */}
+        <TableCellWrap
+          key={`${idx}-edit-icon`}
+          cellClass={classes.editCell}
+          align="right"
+        >
+          <Edit
+            style={{
+              width: 18,
+              height: 18,
+              color: "#0277bd",
+              cursor: "pointer"
+            }}
+            onClick={this.openModal}
+          />
+        </TableCellWrap>
+      </>
+    );
+  }
 }
 const mapStateToProps = (state: AppState): StateProps => ({
   reportState: state.TANKINYUSHO.report
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+type Dispatcher = {
+  updateTANKINYUSHOUsagePerformanceItemsDaily: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    usagePerformance: ReportState["reportDaily"]["usagePerformance"]["after"]
+  ) => Promise<void>;
+  updateTANKINYUSHOUsagePerformanceTANKINYUSHOItemsDaily: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    usagePerformanceTANKINYUSHO: ReportState["reportDaily"]["usagePerformanceTANKINYUSHO"]["after"]
+  ) => Promise<void>;
+  updateTANKINYUSHOUsagePerformanceItemsMonthly: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    usagePerformance: ReportState["reportMonthly"]["usagePerformance"]["after"]
+  ) => Promise<void>;
+  updateTANKINYUSHOUsagePerformanceTANKINYUSHOItemsMonthly: (
+    name: string,
+    value: string | number,
+    keyValue: string,
+    usagePerformanceTANKINYUSHO: ReportState["reportMonthly"]["usagePerformanceTANKINYUSHO"]["after"]
+  ) => Promise<void>;
+};
+
+const mapDispatchToProps = (dispatch: Dispatch): Dispatcher => {
   const { TANKINYUSHO } = dispatches;
 
   return {
@@ -478,7 +500,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       usagePerformance: ReportState["reportDaily"]["usagePerformance"]["after"]
-    ) =>
+    ): Promise<void> =>
       TANKINYUSHO.reportDispatcher(
         dispatch
       ).updateTANKINYUSHOUsagePerformanceItemsDaily(
@@ -492,7 +514,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       usagePerformanceTANKINYUSHO: ReportState["reportDaily"]["usagePerformanceTANKINYUSHO"]["after"]
-    ) =>
+    ): Promise<void> =>
       TANKINYUSHO.reportDispatcher(
         dispatch
       ).updateTANKINYUSHOUsagePerformanceTANKINYUSHOItemsDaily(
@@ -506,7 +528,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       usagePerformance: ReportState["reportMonthly"]["usagePerformance"]["after"]
-    ) =>
+    ): Promise<void> =>
       TANKINYUSHO.reportDispatcher(
         dispatch
       ).updateTANKINYUSHOUsagePerformanceItemsMonthly(
@@ -520,7 +542,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
       value: string | number,
       keyValue: string,
       usagePerformanceTANKINYUSHO: ReportState["reportMonthly"]["usagePerformanceTANKINYUSHO"]["after"]
-    ) =>
+    ): Promise<void> =>
       TANKINYUSHO.reportDispatcher(
         dispatch
       ).updateTANKINYUSHOUsagePerformanceTANKINYUSHOItemsMonthly(

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -49,7 +50,10 @@ export interface GetWorkRecordsResponse {
  * @param startDate YYYYMMDD
  * @param endDate YYYYMMDD
  */
-export const getWorkRecords = async (startDate: string, endDate: string) => {
+export const getWorkRecords = async (
+  startDate: string,
+  endDate: string
+): Promise<AxiosResponse<GetWorkRecordsResponse>> => {
   const url = `${VERSION_URL}/work-records/download?from=${startDate}&to=${endDate}`;
   return request.get<GetWorkRecordsResponse>(url);
 };

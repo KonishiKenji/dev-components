@@ -1,9 +1,9 @@
-"use strictl";
+"use strict";
 
-const NODE_ENV = process.env.NODE_ENV === "local2" ? "local2" : "local";
-
-process.env.NODE_ENV = NODE_ENV;
-process.env.BABEL_ENV = NODE_ENV;
+const BUILD_ENV = process.env.BUILD_ENV || "local";
+process.env.BUILD_ENV = BUILD_ENV
+process.env.NODE_ENV = "local";
+process.env.BABEL_ENV = BUILD_ENV;
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will

@@ -1,5 +1,7 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
+import { ReportResultAPI } from "@stores/domain/report/type";
 
 export interface GetUsagePerformanceMonthlyParams {
   data: {
@@ -58,13 +60,23 @@ export interface GetUsagePerformanceMonthlyParams {
 
 export type GetUsagePerformanceParamsMonthly = GetUsagePerformanceMonthlyParams["data"]["usage_performance"][0];
 
+type ForNormalizeReportDataFromAPI = {
+  data: ReportResultAPI;
+};
+type GetUsagePerformanceMonthly = ForNormalizeReportDataFromAPI &
+  GetUsagePerformanceMonthlyParams;
+
 /**
  * 月毎の利用実績を取得
+ * @param id
  * @param date 対象日 YYYYMM
  */
-export const getUsagePerformanceMonthly = async (id: number, date: string) => {
+export const getUsagePerformanceMonthly = async (
+  id: number,
+  date: string
+): Promise<AxiosResponse<GetUsagePerformanceMonthly>> => {
   const url = `${VERSION_URL}/usage_performance/monthly/${id}/${date}`;
-  return request.get(url);
+  return request.get<GetUsagePerformanceMonthly>(url);
 };
 
 export default getUsagePerformanceMonthly;

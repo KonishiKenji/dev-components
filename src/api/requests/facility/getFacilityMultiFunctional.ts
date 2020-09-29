@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -27,7 +28,9 @@ export interface GetFacilityMultiFunctionalResponse {
 /**
  * 施設(事業所)多機能情報を取得する。
  */
-export const getFacilityMultiFunctional = async () => {
+export const getFacilityMultiFunctional = async (): Promise<
+  AxiosResponse<GetFacilityMultiFunctionalResponse>
+> => {
   const url = `${VERSION_URL}/facility/multifunctional`;
   return request.get<GetFacilityMultiFunctionalResponse>(url);
 };

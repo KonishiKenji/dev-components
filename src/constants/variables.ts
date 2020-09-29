@@ -156,6 +156,7 @@ export const PREFECTURES_LIST: OptionInterface[] = [
 // 負担上限額
 export const INCOME_KIND_LIST: RadioItemInterface[] = [
   { label: "0円", value: "1" },
+  { label: "4,600円", value: "6" },
   { label: "9,300円", value: "3" },
   { label: "18,600円", value: "5" },
   { label: "37,200円", value: "4" }

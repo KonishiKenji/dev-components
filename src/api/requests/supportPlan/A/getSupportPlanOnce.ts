@@ -1,7 +1,7 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 import { SprintType } from "@constants/mgr/IAB/variables";
-import { AxiosResponse } from "axios";
 
 export interface GetSupportPlanOnceResponse {
   data: {

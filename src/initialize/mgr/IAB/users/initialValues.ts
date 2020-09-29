@@ -157,14 +157,50 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
       upperLimitFacilityNumber: undefinedToReturnValue(
         userInFacility.uplimit_facility_number
       ),
+      upperLimitFacilityNumber2: undefinedToReturnValue(
+        userInFacility.uplimit_facility_number2
+      ),
+      upperLimitFacilityNumber3: undefinedToReturnValue(
+        userInFacility.uplimit_facility_number3
+      ),
+      upperLimitFacilityNumber4: undefinedToReturnValue(
+        userInFacility.uplimit_facility_number4
+      ),
       upperLimitFacilityName: undefinedToReturnValue(
         userInFacility.uplimit_facility_name
+      ),
+      upperLimitFacilityName2: undefinedToReturnValue(
+        userInFacility.uplimit_facility_name2
+      ),
+      upperLimitFacilityName3: undefinedToReturnValue(
+        userInFacility.uplimit_facility_name3
+      ),
+      upperLimitFacilityName4: undefinedToReturnValue(
+        userInFacility.uplimit_facility_name4
       ),
       upperLimitTotalYen: undefinedToReturnValue(
         userInFacility.uplimit_total_yen
       ),
+      upperLimitTotalYen2: undefinedToReturnValue(
+        userInFacility.uplimit_total_yen2
+      ),
+      upperLimitTotalYen3: undefinedToReturnValue(
+        userInFacility.uplimit_total_yen3
+      ),
+      upperLimitTotalYen4: undefinedToReturnValue(
+        userInFacility.uplimit_total_yen4
+      ),
       upperLimitUserLoadYen: undefinedToReturnValue(
         userInFacility.uplimit_user_load_yen
+      ),
+      upperLimitUserLoadYen2: undefinedToReturnValue(
+        userInFacility.uplimit_user_load_yen2
+      ),
+      upperLimitUserLoadYen3: undefinedToReturnValue(
+        userInFacility.uplimit_user_load_yen3
+      ),
+      upperLimitUserLoadYen4: undefinedToReturnValue(
+        userInFacility.uplimit_user_load_yen4
       ),
       resultOfManagement: undefinedToReturnValue(
         userInFacility.result_of_management,

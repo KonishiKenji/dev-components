@@ -6,12 +6,13 @@ import { HashRouter, Switch, Route, Redirect } from "react-router-dom";
 import AuthRoutes from "@app/Routes/AuthRoutes";
 import GuestRoutes from "@app/Routes/GuestRoutes";
 import TemporaryRoutes from "@app/Routes/TemporaryRoutes";
+import ScrollToTop from "@app/ScrollToTop";
 import ResetReminder from "@components/pages/auth/password/ResetReminder";
 import ResetReminderComplete from "@components/pages/auth/password/ResetReminderComplete";
 import AccountNewUser from "@components/pages/account/NewUser";
 import AccountNewUserComplete from "@components/pages/account/NewUserComplete";
+import { AppState } from "@stores/type";
 import { ResponseError } from "@stores/ui/type";
-import ScrollToTop from "@app/ScrollToTop";
 
 interface StateProps {
   isLoggedIn: boolean;
@@ -35,27 +36,55 @@ interface MergeProps extends StateProps, DispatchProps {
 type Props = MergeProps;
 
 class NavigationGuard extends React.Component<Props> {
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     await this.props.checkLogin();
     if (this.props.isLoggedIn) {
       this.props.fetchUser();
     }
   }
 
-  public componentDidUpdate(nextProps: Props) {
-    if (nextProps.responseError) {
-      this.authenticationFailed(nextProps.responseError.status);
-    }
-  }
-
-  public componentWillUpdate(nextProps: Props) {
+  public componentWillUpdate(nextProps: Props): void {
     // ログアウト後にcheckLoginを再度行うため、Reactをv17にする前に見直す
     if (!nextProps.isCheckedLoggedIn) {
       this.props.checkLogin();
     }
   }
 
-  public render() {
+  public componentDidUpdate(nextProps: Props): void {
+    if (nextProps.responseError) {
+      this.authenticationFailed(nextProps.responseError.status);
+    }
+  }
+
+  /**
+   * 認証切れでログアウトさせる
+   */
+  private authenticationFailed = (status: number): void => {
+    if ([400, 401].includes(status)) {
+      this.props.responseErrorClear();
+      // 仮ログイン中userが必ずエラーを返す影響で例外処理を入れている
+      if (
+        window.location.hash !== "#/login" &&
+        !this.props.isTemporaryLoggedIn &&
+        this.props.isLogin
+      ) {
+        this.props.logout();
+      }
+    }
+  };
+
+  private getUserConfirmation = (
+    dialogKey: string,
+    callback: (isTransPage: boolean) => void
+  ): void => {
+    const dialogTrigger = window[Symbol.for(dialogKey)];
+    if (dialogTrigger) {
+      return dialogTrigger(callback);
+    }
+    return callback(true);
+  };
+
+  public render(): JSX.Element | null {
     return this.props.isCheckedLoggedIn ? (
       <HashRouter getUserConfirmation={this.getUserConfirmation}>
         <ScrollToTop>
@@ -68,13 +97,9 @@ class NavigationGuard extends React.Component<Props> {
             <Route
               path="/account/user/new/complete"
               component={AccountNewUserComplete}
-              exact={true}
+              exact
             />
-            <Route
-              path="/account/user/new"
-              component={AccountNewUser}
-              exact={true}
-            />
+            <Route path="/account/user/new" component={AccountNewUser} exact />
             {this.props.isLogout && <GuestRoutes />}
             {this.props.isLogin && <AuthRoutes />}
             {this.props.isTemporaryLoggedIn && <TemporaryRoutes />}
@@ -87,37 +112,9 @@ class NavigationGuard extends React.Component<Props> {
       </HashRouter>
     ) : null;
   }
-
-  /**
-   * 認証切れでログアウトさせる
-   */
-  private authenticationFailed = (status: number) => {
-    if ([400, 401].includes(status)) {
-      this.props.responseErrorClear();
-      // 仮ログイン中userが必ずエラーを返す影響で例外処理を入れている
-      if (
-        location.hash !== "#/login" &&
-        !this.props.isTemporaryLoggedIn &&
-        this.props.isLogin
-      ) {
-        this.props.logout();
-      }
-    }
-  };
-
-  private getUserConfirmation = (
-    dialogKey: string,
-    callback: (isTransPage: boolean) => void
-  ) => {
-    const dialogTrigger = window[Symbol.for(dialogKey)];
-    if (dialogTrigger) {
-      return dialogTrigger(callback);
-    }
-    callback(true);
-  };
 }
 
-const mapStateToProps = (state: any): StateProps => ({
+const mapStateToProps = (state: AppState): StateProps => ({
   isLoggedIn: state.auth.isLoggedIn,
   isCheckedLoggedIn: state.auth.isChecked,
   isTemporaryLoggedIn: state.auth.isTemporary,
@@ -127,8 +124,8 @@ const mapStateToProps = (state: any): StateProps => ({
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
   const { authDispatch, userDispatch, uiDispatch } = dispatches;
   return {
-    checkLogin: async () => authDispatch(dispatch).checkLogin(),
-    fetchUser: () => userDispatch(dispatch).me(),
+    checkLogin: async (): Promise<void> => authDispatch(dispatch).checkLogin(),
+    fetchUser: (): Promise<void> => userDispatch(dispatch).me(),
     logout: authDispatch(dispatch).logout,
     responseErrorClear: uiDispatch(dispatch).responseErrorClear
   };
@@ -148,7 +145,7 @@ const mergeProps = (
   };
 };
 
-export default connect<StateProps, DispatchProps, void, MergeProps>(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps

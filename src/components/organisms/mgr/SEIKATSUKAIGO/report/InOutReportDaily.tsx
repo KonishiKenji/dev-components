@@ -113,9 +113,12 @@ class InOutReportDaily extends React.Component<Props, State> {
   public componentDidUpdate(): void {
     const top = document.getElementById("reportDailyHeader");
     if (top && top.clientHeight !== this.state.headerHeight) {
-      this.setState({
-        headerHeight: top.clientHeight
-      });
+      const setClientHeight = (): void => {
+        this.setState({
+          headerHeight: top.clientHeight
+        });
+      };
+      setClientHeight();
     }
   }
 
@@ -200,8 +203,11 @@ class InOutReportDaily extends React.Component<Props, State> {
       initialFlg: param.initialFlg !== undefined ? param.initialFlg : true
     });
     // 日付情報はparamに存在しない為
-    param.target_date = dateInHyphenYYYYMMDDFormat(this.state.selectedDate);
-    this.setState({ data: initialValues(param) });
+    const inoutState = {
+      ...param,
+      target_date: dateInHyphenYYYYMMDDFormat(this.state.selectedDate)
+    };
+    this.setState({ data: initialValues(inoutState) });
   };
 
   private onCancel = (): void => {
@@ -209,6 +215,7 @@ class InOutReportDaily extends React.Component<Props, State> {
   };
 
   private onSubmit = (): void => {
+    this.props.fetchDaily(this.state.selectedDate);
     this.props.fetchSummary(this.state.selectedDate);
     this.props.fetchInoutError(this.state.selectedDate);
   };

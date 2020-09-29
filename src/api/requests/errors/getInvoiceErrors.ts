@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 import { FacilityType } from "@constants/variables";
@@ -34,7 +35,7 @@ export const getInvoiceErrors = async (
   year: string,
   month: string,
   userIds: number[]
-) => {
+): Promise<AxiosResponse<GetInvoiceErrorsResponse>> => {
   const url = `${VERSION_URL}/errors/invoice?year=${year}&month=${month}&excluded_user_ids=${userIds.join(
     ","
   )}`;

@@ -193,29 +193,31 @@ export const MEDICAL_COOPERATION_TEXT = [
 ];
 
 // 登録できる項目一覧
-export enum BulkRegistrationItemList {
-  STATUS_TYPE = "statusType",
-  OTHER_SUPPORT = "otherSupport",
-  FOOD = "food",
-  PICK_UP = "pickup",
-  PICK_UP_PREMISE = "pickupPremise",
-  EMERGENCY_SHORTTERM = "emergencyShortterm",
-  OVER_HOURS = "overHours"
-}
+export const BulkRegistrationItemList = {
+  STATUS_TYPE: "statusType",
+  OTHER_SUPPORT: "otherSupport",
+  FOOD: "food",
+  PICK_UP: "pickup",
+  PICK_UP_PREMISE: "pickupPremise",
+  EMERGENCY_SHORTTERM: "emergencyShortterm",
+  OVER_HOURS: "overHours"
+} as const;
+
+export type BulkRegistrationItemList = typeof BulkRegistrationItemList[keyof typeof BulkRegistrationItemList];
 
 // usagePerformance項目一覧
-export const USAGE_PERFORMANCE_ITEM_LIST = [
-  `${BulkRegistrationItemList.STATUS_TYPE}`
+export const USAGE_PERFORMANCE_ITEM_LIST: BulkRegistrationItemList[] = [
+  BulkRegistrationItemList.STATUS_TYPE
 ];
 
 // usagePerformance項目一覧
-export const USAGE_PERFORMANCE_TANKINYUSHO_ITEM_LIST = [
-  `${BulkRegistrationItemList.OTHER_SUPPORT}`,
-  `${BulkRegistrationItemList.FOOD}`,
-  `${BulkRegistrationItemList.PICK_UP}`,
-  `${BulkRegistrationItemList.PICK_UP_PREMISE}`,
-  `${BulkRegistrationItemList.EMERGENCY_SHORTTERM}`,
-  `${BulkRegistrationItemList.OVER_HOURS}`
+export const USAGE_PERFORMANCE_TANKINYUSHO_ITEM_LIST: BulkRegistrationItemList[] = [
+  BulkRegistrationItemList.OTHER_SUPPORT,
+  BulkRegistrationItemList.FOOD,
+  BulkRegistrationItemList.PICK_UP,
+  BulkRegistrationItemList.PICK_UP_PREMISE,
+  BulkRegistrationItemList.EMERGENCY_SHORTTERM,
+  BulkRegistrationItemList.OVER_HOURS
 ];
 
 // storeのkey名とselectBoxのkey名の関連付け

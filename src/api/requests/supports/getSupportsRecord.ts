@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -83,7 +84,7 @@ const getSupportsRecord = async (
   year: string,
   month: string,
   target?: "work" | "interview"
-) => {
+): Promise<AxiosResponse<GetSupportsRecordResponse>> => {
   const url = `${VERSION_URL}/supports/users/${uifId}/records/${year}/${month}`;
   const query = target ? `?target=${target}` : "";
   return request.get<GetSupportsRecordResponse>(url + query);

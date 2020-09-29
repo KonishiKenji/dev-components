@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -176,7 +177,9 @@ export interface PostFacilityParams {
  * 事業所情報を更新する
  * @param values PostFacilityParams
  */
-export const postFacility = async (values: PostFacilityParams) => {
+export const postFacility = async (
+  values: PostFacilityParams
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/facility`;
   return request.post(url, values);
 };

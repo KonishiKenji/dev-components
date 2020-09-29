@@ -2,7 +2,7 @@ import { OperationsState } from "@stores/domain/operations/types";
 import * as format from "date-fns/format";
 import get from "lodash-es/get";
 import { ShotMultipleSelectValue } from "@interfaces/ui/form";
-import { buildStaffs } from "@initialize/mgr/IAB/record/daily/initialValues";
+import buildStaffs from "@utils/domain/staffs/buildStaffs";
 
 export interface RecordMonthlyValues {
   operation: [

@@ -496,11 +496,11 @@ const convertParamByStatus = (value: ReportInterface): ReportInterface => {
     // 終了時間
     outTime: "",
     // 送迎
-    travelTime: "0",
+    travelTime: "0" as string | null,
     // 同一敷地内(送迎)
     pickupPremises: "0",
     // 食事提供
-    didGetFood: "0",
+    didGetFood: "0" as string | null,
     // 体験利用支援種別
     trialUsageKind: "0",
     // 地域生活支援拠点
@@ -517,6 +517,10 @@ const convertParamByStatus = (value: ReportInterface): ReportInterface => {
 
   // サービス提供の状況確認、不要項目の初期化
   switch (`${value.status}`) {
+    case JIRITSUKUNREN_IN_OUT_RECORDS_STATUS.NONE:
+      initialValue.didGetFood = null;
+      initialValue.travelTime = null;
+      break;
     case JIRITSUKUNREN_IN_OUT_RECORDS_STATUS.USUAL_PLACE:
       initialValue.inTime = value.inTime ? value.inTime : initialValue.inTime;
       initialValue.outTime = value.outTime
@@ -602,8 +606,8 @@ const removeNoChangeData = (
   const differenceObject: RequestParam["otherParam"] = {
     status: resultAfter.status,
     restTime: 60,
-    didGetFood: resultAfter.didGetFood ? resultAfter.didGetFood : "0",
-    travelTime: resultAfter.travelTime ? resultAfter.travelTime : "0",
+    didGetFood: resultAfter.didGetFood ? resultAfter.didGetFood : null,
+    travelTime: resultAfter.travelTime ? resultAfter.travelTime : null,
     pickupPremises: resultAfter.pickupPremises
       ? resultAfter.pickupPremises
       : "0",
@@ -817,6 +821,5 @@ export const normalizeJIRITSUKUNRENSEIKATSUReportDataToAPI = (
     reportListBefore,
     reportListAfter
   );
-
   return targetReportList;
 };

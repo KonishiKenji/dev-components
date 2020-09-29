@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -32,7 +33,9 @@ export interface GetInOutDailySummaryResponse {
  * 利用実績集計(日ごと)を取得する
  * @param date YYYYMMDD
  */
-export const getInOutSummary = async (date: string) => {
+export const getInOutSummary = async (
+  date: string
+): Promise<AxiosResponse<GetInOutDailySummaryResponse>> => {
   const url = `${VERSION_URL}/inout/summary/date/${date}`;
   return request.get<GetInOutDailySummaryResponse>(url);
 };

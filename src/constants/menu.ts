@@ -4,6 +4,7 @@
  */
 
 import { ComponentType } from "react";
+import { SvgIconProps } from "@material-ui/core/SvgIcon/SvgIcon";
 
 // 全階層共通
 interface MenuItemBase {
@@ -20,12 +21,12 @@ interface MenuItemBase {
 // 第二階層
 export interface MenuItemChild extends MenuItemBase {
   key?: "facility" | "users" | "records"; // errorsのkeyと紐づける
-  rightIcon?: ComponentType<any>;
+  rightIcon?: ComponentType<SvgIconProps>;
 }
 
 // 第一階層
 export interface MenuItem extends MenuItemBase {
-  icon: ComponentType<any>;
+  icon: ComponentType<SvgIconProps>;
   children?: MenuItemChild[];
 }
 

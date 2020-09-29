@@ -2,13 +2,35 @@ import { BasicErrors } from "@interfaces/mgr/IAB/Users/basic";
 import { ServiceUseErrors } from "@interfaces/mgr/IAB/Users/serviceUse";
 import { RecipientCertificateErrors } from "@interfaces/mgr/IAB/Users/recipientCertificate";
 import { UsersValues } from "@initialize/mgr/IAB/users/initialValues";
-import validator, { dateValidator, validateSwitcher } from "@validator";
+import validator, { dateValidator, validateSwitcher, Rule } from "@validator";
 import { DEFAULT_SELECT_VALUE } from "@constants/variables";
 import { SelectDateValue } from "@interfaces/ui/form";
 
 type FacilityErrors = BasicErrors &
   ServiceUseErrors &
   RecipientCertificateErrors;
+
+// "NOT_SELECTED"がrequiredバリデーションにかからないため""に変換
+const notSelectedToEmpty = (value: SelectDateValue): SelectDateValue => {
+  const date = {
+    year: value.year === "NOT_SELECTED" ? "" : value.year,
+    month: value.month,
+    day: value.day
+  };
+  return date;
+};
+
+// nullがrequiredバリデーションにかからないため""に変換
+const nullToEmpty = (value: string): string => {
+  const param = value === null ? "" : value;
+  return param;
+};
+
+// 文字数制限
+const lengthRule = (length: number): Rule => ({
+  type: "checkCharacterLength",
+  length
+});
 
 const basicValidation = (values: UsersValues): BasicErrors => {
   return {
@@ -45,22 +67,6 @@ const basicValidation = (values: UsersValues): BasicErrors => {
       guardianTel: validator(values.basic.guardianTel, "naturalNumber")
     }
   };
-};
-
-// "NOT_SELECTED"がrequiredバリデーションにかからないため""に変換
-const notSelectedToEmpty = (value: SelectDateValue): SelectDateValue => {
-  const date = {
-    year: value.year === "NOT_SELECTED" ? "" : value.year,
-    month: value.month,
-    day: value.day
-  };
-  return date;
-};
-
-// nullがrequiredバリデーションにかからないため""に変換
-const nullToEmpty = (value: string): string => {
-  const param = value === null ? "" : value;
-  return param;
 };
 
 const serviceUseValidation = (values: UsersValues): ServiceUseErrors => {
@@ -165,10 +171,62 @@ const serviceUseValidation = (values: UsersValues): ServiceUseErrors => {
           { type: "checkDigits", digits: 10 }
         )
       ),
+      upperLimitFacilityNumber2: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag,
+        validator(
+          values.serviceUse.upperLimitFacilityNumber2,
+          "naturalNumber",
+          { type: "checkDigits", digits: 10 }
+        )
+      ),
+      upperLimitFacilityNumber3: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag,
+        validator(
+          values.serviceUse.upperLimitFacilityNumber3,
+          "naturalNumber",
+          { type: "checkDigits", digits: 10 }
+        )
+      ),
+      upperLimitFacilityNumber4: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag,
+        validator(
+          values.serviceUse.upperLimitFacilityNumber4,
+          "naturalNumber",
+          { type: "checkDigits", digits: 10 }
+        )
+      ),
       upperLimitFacilityName: validateSwitcher(
         values.serviceUse.upperLimitFacilityFlag,
         validator(
           nullToEmpty(values.serviceUse.upperLimitFacilityName),
+          lengthRule(2500),
+          "required"
+        )
+      ),
+      upperLimitFacilityName2: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          !!values.serviceUse.upperLimitFacilityNumber2,
+        validator(
+          nullToEmpty(values.serviceUse.upperLimitFacilityName2),
+          lengthRule(2500),
+          "required"
+        )
+      ),
+      upperLimitFacilityName3: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          !!values.serviceUse.upperLimitFacilityNumber3,
+        validator(
+          nullToEmpty(values.serviceUse.upperLimitFacilityName3),
+          lengthRule(2500),
+          "required"
+        )
+      ),
+      upperLimitFacilityName4: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          !!values.serviceUse.upperLimitFacilityNumber4,
+        validator(
+          nullToEmpty(values.serviceUse.upperLimitFacilityName4),
+          lengthRule(2500),
           "required"
         )
       ),
@@ -177,11 +235,50 @@ const serviceUseValidation = (values: UsersValues): ServiceUseErrors => {
           values.serviceUse.upperLimitControlledBy === "1",
         validator(values.serviceUse.upperLimitTotalYen, "naturalNumberNonZero")
       ),
+      upperLimitTotalYen2: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          values.serviceUse.upperLimitControlledBy === "1",
+        validator(values.serviceUse.upperLimitTotalYen2, "naturalNumberNonZero")
+      ),
+      upperLimitTotalYen3: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          values.serviceUse.upperLimitControlledBy === "1",
+        validator(values.serviceUse.upperLimitTotalYen3, "naturalNumberNonZero")
+      ),
+      upperLimitTotalYen4: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          values.serviceUse.upperLimitControlledBy === "1",
+        validator(values.serviceUse.upperLimitTotalYen4, "naturalNumberNonZero")
+      ),
       upperLimitUserLoadYen: validateSwitcher(
         values.serviceUse.upperLimitFacilityFlag &&
           values.serviceUse.upperLimitControlledBy === "1",
         validator(
           values.serviceUse.upperLimitUserLoadYen,
+          "naturalNumberNonZero"
+        )
+      ),
+      upperLimitUserLoadYen2: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          values.serviceUse.upperLimitControlledBy === "1",
+        validator(
+          values.serviceUse.upperLimitUserLoadYen2,
+          "naturalNumberNonZero"
+        )
+      ),
+      upperLimitUserLoadYen3: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          values.serviceUse.upperLimitControlledBy === "1",
+        validator(
+          values.serviceUse.upperLimitUserLoadYen3,
+          "naturalNumberNonZero"
+        )
+      ),
+      upperLimitUserLoadYen4: validateSwitcher(
+        values.serviceUse.upperLimitFacilityFlag &&
+          values.serviceUse.upperLimitControlledBy === "1",
+        validator(
+          values.serviceUse.upperLimitUserLoadYen4,
           "naturalNumberNonZero"
         )
       ),

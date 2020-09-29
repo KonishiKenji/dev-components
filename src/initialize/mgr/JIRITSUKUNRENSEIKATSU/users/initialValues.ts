@@ -51,7 +51,7 @@ const undefinedNumberToReturnValue = (
 };
 
 // FlgがCheckbox.ONの場合はtrueを返す
-const determineTureOrFalse = (value: Checkbox | undefined): boolean => {
+const determineTrueOrFalse = (value: Checkbox | undefined): boolean => {
   if (value === Checkbox.ON) {
     return true;
   }
@@ -79,27 +79,27 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
       nameSeiKana: undefinedToReturnValue(userInFacility.name_sei_kana),
       nameMeiKana: undefinedToReturnValue(userInFacility.name_mei_kana),
       recipientNumber: undefinedToReturnValue(userInFacility.recipient_number),
-      noneRecipientNumberFlag: determineTureOrFalse(
+      noneRecipientNumberFlag: determineTrueOrFalse(
         userInFacility.none_recipient_number_flg
       ),
       gender: undefinedToReturnValue(userInFacility.gender, 1),
-      classifyPhysicalFlag: determineTureOrFalse(
+      classifyPhysicalFlag: determineTrueOrFalse(
         userInFacility.classify_physical_flg
       ),
-      classifyIntelligenceFlag: determineTureOrFalse(
+      classifyIntelligenceFlag: determineTrueOrFalse(
         userInFacility.classify_intelligence_flg
       ),
-      classifyMindFlag: determineTureOrFalse(userInFacility.classify_mind_flg),
-      classifyGrowthFlag: determineTureOrFalse(
+      classifyMindFlag: determineTrueOrFalse(userInFacility.classify_mind_flg),
+      classifyGrowthFlag: determineTrueOrFalse(
         userInFacility.classify_growth_flg
       ),
-      classifyBrainFlag: determineTureOrFalse(
+      classifyBrainFlag: determineTrueOrFalse(
         userInFacility.classify_brain_flg
       ),
-      classifyIncurableFlag: determineTureOrFalse(
+      classifyIncurableFlag: determineTrueOrFalse(
         userInFacility.classify_incurable_flg
       ),
-      classifyHandicappedFlag: determineTureOrFalse(
+      classifyHandicappedFlag: determineTrueOrFalse(
         userInFacility.classify_handicapped_flg
       ),
       dateOfBirth: emptyToNotSelected(
@@ -154,7 +154,19 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
         JIRITSUKUNRENSEIKATSU.income_kind,
         0
       ),
-      upperLimitFacilityFlag: determineTureOrFalse(
+      subsidizedFlag: determineTrueOrFalse(userInFacility.subsidized_flg),
+      subsidizedPercent: undefinedToReturnValue(
+        userInFacility.subsidized_percent
+      ),
+      subsidizedYen: undefinedToReturnValue(userInFacility.subsidized_yen),
+      subsidizedUnit: undefinedToReturnValue(
+        userInFacility.subsidized_unit_flg,
+        1
+      ),
+      subsidizedCityId: userInFacility.subsidized_city_id
+        ? `${userInFacility.subsidized_city_id}`
+        : DEFAULT_SELECT_VALUE,
+      upperLimitFacilityFlag: determineTrueOrFalse(
         userInFacility.uplimit_facility_flg
       ),
       upperLimitControlledBy: undefinedToReturnValue(
@@ -203,7 +215,7 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
       )
     },
     recipientCertificate: {
-      userChargeLimitFlag: determineTureOrFalse(
+      userChargeLimitFlag: determineTrueOrFalse(
         userInFacility.user_charge_limit_flg
       ),
       userChargeLimitStartDate: emptyToNotSelected(
@@ -216,7 +228,7 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
           undefinedToReturnValue(userInFacility.date_end_user_charge_limit)
         )
       ),
-      foodServeAdditionFlg: determineTureOrFalse(
+      foodServeAdditionFlg: determineTrueOrFalse(
         userInFacility.food_serve_addition_flg
       ),
       foodServeAdditionStartDate: emptyToNotSelected(
@@ -229,7 +241,7 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
           undefinedToReturnValue(userInFacility.date_end_food_serve_addition)
         )
       ),
-      careSupportAuthFlag: determineTureOrFalse(
+      careSupportAuthFlag: determineTrueOrFalse(
         userInFacility.care_support_auth_flg
       ),
       careSupportAuthStartDate: emptyToNotSelected(
@@ -242,7 +254,7 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
           undefinedToReturnValue(userInFacility.date_end_care_support_auth)
         )
       ),
-      careSupportPaymentFlag: determineTureOrFalse(
+      careSupportPaymentFlag: determineTrueOrFalse(
         userInFacility.care_support_payment_flg
       ),
       careSupportPaymentStartDate: emptyToNotSelected(
@@ -255,7 +267,7 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
           undefinedToReturnValue(userInFacility.date_end_care_support_payment)
         )
       ),
-      planSupportPaymentFlag: determineTureOrFalse(
+      planSupportPaymentFlag: determineTrueOrFalse(
         userInFacility.plan_support_payment_flg
       ),
       planSupportPaymentStartDate: emptyToNotSelected(
@@ -268,7 +280,7 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
           undefinedToReturnValue(userInFacility.date_end_plan_support_payment)
         )
       ),
-      planSupportMonitorFlag: determineTureOrFalse(
+      planSupportMonitorFlag: determineTrueOrFalse(
         userInFacility.plan_support_monitor_flg
       ),
       planSupportMonitorStartDate: emptyToNotSelected(

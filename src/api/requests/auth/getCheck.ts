@@ -1,15 +1,18 @@
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import request from "@api/index";
 import { COMMON_VERSION_URL } from "@config";
-import { AxiosRequestConfig } from "axios";
 
-export interface GetCheckResponse {
+type GetCheckResponse = {
   status: number;
-}
+};
 
 /**
  * リンクの有効期限を取得する
  */
-export const getCheck = async (email: string, verificationToken: string) => {
+export const getCheck = async (
+  email: string,
+  verificationToken: string
+): Promise<AxiosResponse<GetCheckResponse>> => {
   const requestParams: AxiosRequestConfig = {
     headers: {
       "VERIFICATION-TOKEN": verificationToken

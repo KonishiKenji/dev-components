@@ -1,5 +1,12 @@
 import * as React from "react";
-import { createStyles, WithStyles, withStyles } from "@material-ui/core";
+import {
+  createStyles,
+  WithStyles,
+  withStyles,
+  TableRow,
+  TableBody,
+  TableCell
+} from "@material-ui/core";
 import { StyleRules } from "@material-ui/core/styles";
 import { FormikProps, getIn } from "formik";
 import Typography from "@material-ui/core/Typography";
@@ -15,6 +22,8 @@ import FormikSwitch from "@components/molecules/FormikSwitch";
 import FormikRadioButtons from "@components/molecules/FormikRadioButtons";
 import FormikSelectDateNotSelectedDefault from "@components/molecules/FormikSelectDateNotSelectedDefault";
 import FormikCheckbox from "@components/molecules/FormikCheckbox";
+import Table from "@components/molecules/Table";
+import TableHead from "@components/molecules/TableHead";
 import { OptionInterface } from "@components/atoms/DropDown";
 
 import { connect } from "react-redux";
@@ -162,6 +171,44 @@ const styles = (): StyleRules =>
     },
     fieldWrapperSwitch: {
       "& > div > div": { marginTop: 6 }
+    },
+    officeInfoTable: {
+      marginLeft: 16,
+      marginBottom: 16,
+      width: 880
+    },
+    officeInfoTableHeadCell: {
+      color: "#37474f",
+      paddingLeft: 16,
+      borderBottom: "none"
+    },
+    officeInfoTableCaption: {
+      marginLeft: -16,
+      marginBottom: 8,
+      textAlign: "left"
+    },
+    officeInfoTableRow: {
+      "&:nth-of-type(even)": {
+        backgroundColor: "#f5f5f5"
+      },
+      "&:last-child": {
+        borderBottom: "1px solid #eeeeee"
+      }
+    },
+    officeInfoTableCell: {
+      padding: "12px 16px",
+      borderBottom: "none",
+      verticalAlign: "initial",
+      "&:last-child": {
+        // MuiTableCell:last-child の上書き
+        paddingRight: 16
+      }
+    },
+    officeInfoTextInput: {
+      width: 176
+    },
+    officeInfoNameInput: {
+      width: 224
     }
   });
 
@@ -180,7 +227,7 @@ interface State {
   shouldFirstSetup: boolean;
   showIncomeKindType: boolean;
   showSubsidizedPercent: boolean;
-  showUpperLimitTotalYenAndUserLoadYen: boolean;
+  showOfficeInfoTable: boolean;
   showUpperLimitYen: boolean;
   showAgreedByContractFlg: boolean;
   pickupPremisesCase: OptionInterface[];
@@ -197,7 +244,7 @@ class ServiceUseFields extends React.Component<Props, State> {
       shouldFirstSetup: true,
       showIncomeKindType: true,
       showSubsidizedPercent: true,
-      showUpperLimitTotalYenAndUserLoadYen: true,
+      showOfficeInfoTable: true,
       showUpperLimitYen: false,
       showAgreedByContractFlg: false,
       pickupPremisesCase: PICKUP_PREMISES_CASE_0,
@@ -212,7 +259,7 @@ class ServiceUseFields extends React.Component<Props, State> {
     shouldFirstSetup: boolean;
     showIncomeKindType: boolean;
     showSubsidizedPercent: boolean;
-    showUpperLimitTotalYenAndUserLoadYen: boolean;
+    showOfficeInfoTable: boolean;
     showUpperLimitYen: boolean;
     showAgreedByContractFlg: boolean;
     showPickupPremises: boolean;
@@ -239,8 +286,7 @@ class ServiceUseFields extends React.Component<Props, State> {
       shouldFirstSetup: false,
       showIncomeKindType: serviceUse.incomeKind === "1",
       showSubsidizedPercent: serviceUse.subsidizedUnit === "1",
-      showUpperLimitTotalYenAndUserLoadYen:
-        serviceUse.upperLimitControlledBy === "1",
+      showOfficeInfoTable: serviceUse.upperLimitControlledBy === "1",
       showUpperLimitYen: serviceUse.resultOfManagement === "3",
       showAgreedByContractFlg: serviceUse.agreedByContractFlg === "2",
       showPickupPremises: serviceUse.defPickup === "0",
@@ -346,7 +392,7 @@ class ServiceUseFields extends React.Component<Props, State> {
       this.props.setFormikFieldValue("serviceUse.upperLimitYen", "");
       this.setState({
         showUpperLimitYen: false,
-        showUpperLimitTotalYenAndUserLoadYen: true
+        showOfficeInfoTable: true
       });
       this.resetUpperLimitFacilityYenForm();
     } else {
@@ -355,10 +401,25 @@ class ServiceUseFields extends React.Component<Props, State> {
   };
 
   private resetUpperLimitFacilityYenForm = (): void => {
-    this.props.setFormikFieldValue("serviceUse.upperLimitFacilityNumber", "");
-    this.props.setFormikFieldValue("serviceUse.upperLimitFacilityName", "");
-    this.props.setFormikFieldValue("serviceUse.upperLimitTotalYen", "");
-    this.props.setFormikFieldValue("serviceUse.upperLimitUserLoadYen", "");
+    for (let i = 0; i < 4; i += 1) {
+      const dataNumber = i !== 0 ? String(i + 1) : "";
+      this.props.setFormikFieldValue(
+        `serviceUse.upperLimitFacilityNumber${dataNumber}`,
+        ""
+      );
+      this.props.setFormikFieldValue(
+        `serviceUse.upperLimitFacilityName${dataNumber}`,
+        ""
+      );
+      this.props.setFormikFieldValue(
+        `serviceUse.upperLimitTotalYen${dataNumber}`,
+        ""
+      );
+      this.props.setFormikFieldValue(
+        `serviceUse.upperLimitUserLoadYen${dataNumber}`,
+        ""
+      );
+    }
   };
 
   /**
@@ -368,7 +429,7 @@ class ServiceUseFields extends React.Component<Props, State> {
     e: React.ChangeEvent<HTMLSelectElement>
   ): void => {
     const { value } = e.target;
-    this.setState({ showUpperLimitTotalYenAndUserLoadYen: value === "1" });
+    this.setState({ showOfficeInfoTable: value === "1" });
     this.resetUpperLimitFacilityYenForm();
   };
 
@@ -623,30 +684,124 @@ class ServiceUseFields extends React.Component<Props, State> {
                 onChangeHook={this.onChangeUpperLimitControlledBy}
               />
             </div>
-            <FormGroup row className={this.props.classes.fieldWrapperForm}>
-              <FormikTextField
-                name="serviceUse.upperLimitFacilityNumber"
-                label="事業所番号"
-                maxLength={10}
-                placeholder="0000000000"
-              />
-              <FormikTextField
-                name="serviceUse.upperLimitFacilityName"
-                label="事業所名"
-              />
-            </FormGroup>
-            {this.state.showUpperLimitTotalYenAndUserLoadYen && (
+            {this.state.showOfficeInfoTable ? (
+              <Table
+                key="他事業所情報"
+                className={this.props.classes.officeInfoTable}
+              >
+                <caption className={this.props.classes.officeInfoTableCaption}>
+                  <Typography>他事業所情報</Typography>
+                </caption>
+                <TableHead
+                  tabIndex={0}
+                  key={1}
+                  selected={false}
+                  items={[
+                    {
+                      align: "left",
+                      label: "事業所番号",
+                      className: this.props.classes.officeInfoTableHeadCell
+                    },
+                    {
+                      align: "left",
+                      label: "事業所名",
+                      className: this.props.classes.officeInfoTableHeadCell
+                    },
+                    {
+                      align: "left",
+                      label: "総費用額",
+                      className: this.props.classes.officeInfoTableHeadCell
+                    },
+                    {
+                      align: "left",
+                      label: "利用者負担額",
+                      className: this.props.classes.officeInfoTableHeadCell
+                    }
+                  ]}
+                  headerStyle={{
+                    backgroundColor: "#eceff1"
+                  }}
+                  rowStyle={{
+                    color: "#37474f",
+                    height: 40
+                  }}
+                />
+                <TableBody>
+                  {[0, 1, 2, 3].map((item) => {
+                    const dataNumber = item ? String(item + 1) : "";
+                    const size = "auto";
+                    const filedStyle = {
+                      marginRight: 0,
+                      marginBottom: 0
+                    };
+                    return (
+                      <TableRow
+                        className={this.props.classes.officeInfoTableRow}
+                        key={item}
+                      >
+                        <TableCell
+                          className={this.props.classes.officeInfoTableCell}
+                        >
+                          <FormikTextField
+                            name={`serviceUse.upperLimitFacilityNumber${dataNumber}`}
+                            maxLength={10}
+                            placeholder="0000000000"
+                            className={this.props.classes.officeInfoTextInput}
+                            size={size}
+                            style={filedStyle}
+                          />
+                        </TableCell>
+                        <TableCell
+                          className={this.props.classes.officeInfoTableCell}
+                        >
+                          <FormikTextField
+                            name={`serviceUse.upperLimitFacilityName${dataNumber}`}
+                            className={this.props.classes.officeInfoNameInput}
+                            size={size}
+                            style={filedStyle}
+                            maxLength={2500}
+                          />
+                        </TableCell>
+                        <TableCell
+                          className={this.props.classes.officeInfoTableCell}
+                        >
+                          <FormikTextField
+                            name={`serviceUse.upperLimitTotalYen${dataNumber}`}
+                            endAdornmentLabel="円"
+                            multiline
+                            className={this.props.classes.officeInfoTextInput}
+                            size={size}
+                            style={filedStyle}
+                          />
+                        </TableCell>
+                        <TableCell
+                          className={this.props.classes.officeInfoTableCell}
+                        >
+                          <FormikTextField
+                            name={`serviceUse.upperLimitUserLoadYen${dataNumber}`}
+                            endAdornmentLabel="円"
+                            maxLength={11}
+                            className={this.props.classes.officeInfoTextInput}
+                            size={size}
+                            style={filedStyle}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            ) : (
               <FormGroup row className={this.props.classes.fieldWrapperForm}>
                 <FormikTextField
-                  name="serviceUse.upperLimitTotalYen"
-                  label="総費用額"
-                  endAdornmentLabel="円"
+                  name="serviceUse.upperLimitFacilityNumber"
+                  label="事業所番号"
+                  maxLength={10}
+                  placeholder="0000000000"
                 />
                 <FormikTextField
-                  name="serviceUse.upperLimitUserLoadYen"
-                  label="利用者負担額"
-                  endAdornmentLabel="円"
-                  maxLength={11}
+                  name="serviceUse.upperLimitFacilityName"
+                  label="事業所名"
                 />
               </FormGroup>
             )}

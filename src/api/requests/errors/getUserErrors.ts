@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 import { FacilityType } from "@constants/variables";
@@ -27,7 +28,9 @@ export interface GetUserErrorsResponse {
 /**
  * ユーザーのエラー一覧を取得する
  */
-export const getUserErrors = async () => {
+export const getUserErrors = async (): Promise<
+  AxiosResponse<GetUserErrorsResponse>
+> => {
   const url = `${VERSION_URL}/errors/users`;
   return request.get<GetUserErrorsResponse>(url);
 };

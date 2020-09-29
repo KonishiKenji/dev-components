@@ -117,7 +117,6 @@ const AuthRoutes: React.FC<Props> = (props) => {
           exact
           path="/customer-support/facility"
           component={SwitchAssociatedFacility}
-          groupInvoiceCheck
         />
         {/* 種別ごとのルーティング */}
         {props.user.facility_type === FacilityType.SHISETSUNYUSHO && (

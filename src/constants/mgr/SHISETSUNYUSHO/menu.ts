@@ -6,7 +6,7 @@ import OpenInNew from "@material-ui/icons/OpenInNew";
 import HelpOutLine from "@material-ui/icons/HelpOutline";
 import { MenuItemList } from "@constants/menu";
 
-export const MENU_ITEM_LIST_SHISETSUNYUSHO: MenuItemList = [
+const MENU_ITEM_LIST_SHISETSUNYUSHO: MenuItemList = [
   {
     title: "利用実績",
     to: URL.REPORT,
@@ -53,3 +53,5 @@ export const MENU_ITEM_LIST_SHISETSUNYUSHO: MenuItemList = [
     ]
   }
 ];
+
+export default MENU_ITEM_LIST_SHISETSUNYUSHO;

@@ -1,9 +1,7 @@
-// import { create, SheetsRegistry } from 'jss';
-// import preset from 'jss-preset-default';
-// import createGenerateClassName from '@material-ui/core/styles/createGenerateClassName';
 import { createMuiTheme } from "@material-ui/core/styles";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 
+/* eslint-disable import/prefer-default-export */
 export const theme = createMuiTheme({
   palette: {
     background: {

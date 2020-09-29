@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 import { FacilityType } from "@constants/variables";
@@ -29,7 +30,10 @@ export interface GetInOutErrorsResponse {
  * @param year
  * @param month
  */
-export const getInOutErrors = async (year: string, month: string) => {
+export const getInOutErrors = async (
+  year: string,
+  month: string
+): Promise<AxiosResponse<GetInOutErrorsResponse>> => {
   const url = `${VERSION_URL}/errors/inout?year=${year}&month=${month}`;
   return request.get<GetInOutErrorsResponse>(url);
 };

@@ -1,7 +1,8 @@
+import * as React from "react";
 import { OptionInterface } from "@components/atoms/DropDown";
 import { RadioItemInterface } from "@components/atoms/RadioButtons";
 
-export default interface Field {
+export type Field = {
   id: string;
   type:
     | FieldType.CHECKBOX
@@ -12,9 +13,9 @@ export default interface Field {
     | FieldType.DATE_SELECT_FIELDS
     | FieldType.LABEL
     | FieldType.DESCRIPTION;
-  value: any;
-  onChange?: any;
-  onBlur?: any;
+  value: string;
+  onChange: (event: React.ChangeEvent<{}>, value?: string | boolean) => void;
+  onBlur?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   styles?: object;
   label?: string;
   radioItems?: RadioItemInterface[];
@@ -40,12 +41,11 @@ export default interface Field {
   minLength?: number;
   maxLength?: number;
   errorMessage?: string;
-  dateFieldData?: any;
   descriptionTitle?: string;
   inputStyle?: object;
   isHelperTitleTip?: boolean;
   helperItemTip?: object;
-}
+};
 
 export enum FieldType {
   CHECKBOX = "CHECKBOX",

@@ -1,8 +1,8 @@
 /**
- * 文字数チェック
- * @param value
+ * 文字列の桁数以内チェック
+ * @param value テキスト
+ * @param length 許容する最大桁数
  */
-
 const checkCharacterLength = (
   value: string,
   length: number

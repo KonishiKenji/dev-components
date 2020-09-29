@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -54,7 +55,10 @@ export interface GetOperations {
  * @param year 年
  * @param month 月
  */
-const getOperations = async (year: string, month: string) => {
+const getOperations = async (
+  year: string,
+  month: string
+): Promise<AxiosResponse<GetOperations>> => {
   const url = `${VERSION_URL}/operations/${year}/${month}`;
   return request.get<GetOperations>(url);
 };

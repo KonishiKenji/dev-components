@@ -1,6 +1,6 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
-import { AxiosResponse } from "axios";
 
 export interface GetFacilityResponse {
   data: {

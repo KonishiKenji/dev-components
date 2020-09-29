@@ -52,7 +52,7 @@ const undefinedNumberToReturnValue = (
 
 // valueがCheckbox.ONの場合はtrueを返す
 const determineTrueOrFalse = (value?: Checkbox): boolean => {
-  return value === Checkbox.ON ? true : false;
+  return value === Checkbox.ON;
 };
 
 // valueが1の場合はtrueを返す
@@ -163,6 +163,18 @@ const initialValues = (state?: UsersInFacilityState["user"]): UsersValues => {
         SHISETSUNYUSHO.income_kind,
         0
       ),
+      subsidizedFlag: determineTrueOrFalse(userInFacility.subsidized_flg),
+      subsidizedPercent: undefinedToReturnValue(
+        userInFacility.subsidized_percent
+      ),
+      subsidizedYen: undefinedToReturnValue(userInFacility.subsidized_yen),
+      subsidizedUnit: undefinedToReturnValue(
+        userInFacility.subsidized_unit_flg,
+        1
+      ),
+      subsidizedCityId: userInFacility.subsidized_city_id
+        ? `${userInFacility.subsidized_city_id}`
+        : DEFAULT_SELECT_VALUE,
       supplementaryBenefitFlg: numberToBoolean(
         SHISETSUNYUSHO.supplementary_benefit_flg
       ),

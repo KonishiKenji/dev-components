@@ -30,6 +30,8 @@ interface OwnProps {
   rows?: string;
   inputProps?: never;
   InputProps?: never;
+  label?: string; // ReactNodeを渡すとバグがあるのでしばらくstring固定
+  helperText?: string; // 理由は上と同じで発生したことはまだないが塞いでおく
 }
 
 type Props = OwnProps & WithStyles<typeof styles> & TextFieldProps;

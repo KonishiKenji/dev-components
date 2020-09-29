@@ -104,6 +104,35 @@ const serviceUseValidation = (values: UsersValues): ServiceUseErrors => {
           { type: "checkDigits", digits: 2 }
         )
       ),
+      subsidizedPercent: validateSwitcher(
+        values.serviceUse.subsidizedFlag &&
+          values.serviceUse.subsidizedUnit === "1",
+        validator(
+          values.serviceUse.subsidizedPercent,
+          "required",
+          "naturalNumberNonZero",
+          {
+            type: "upperLimit",
+            upperLimit: 100
+          }
+        )
+      ),
+      subsidizedYen: validateSwitcher(
+        values.serviceUse.subsidizedFlag &&
+          values.serviceUse.subsidizedUnit === "2",
+        validator(
+          values.serviceUse.subsidizedYen,
+          "required",
+          "naturalNumberNonZero"
+        )
+      ),
+      subsidizedCityId: validateSwitcher(
+        values.serviceUse.subsidizedFlag,
+        validator(values.serviceUse.subsidizedCityId, {
+          type: "selectRequired",
+          value: DEFAULT_SELECT_VALUE
+        })
+      ),
       upperLimitFacilityNumber: validateSwitcher(
         values.serviceUse.upperLimitFacilityFlag,
         validator(

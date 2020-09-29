@@ -3,11 +3,7 @@ import reducer from "./reducer";
 import { logger } from "redux-logger";
 import { composeWithDevTools } from "redux-devtools-extension";
 
-const isDevelopment =
-  process.env.NODE_ENV === "local" ||
-  process.env.NODE_ENV === "development" ||
-  process.env.NODE_ENV === "development2" ||
-  process.env.NODE_ENV === "development3";
+const isDevelopment = process.env.REACT_APP_ENV !== "production";
 
 const middlewareList = [];
 if (isDevelopment) {

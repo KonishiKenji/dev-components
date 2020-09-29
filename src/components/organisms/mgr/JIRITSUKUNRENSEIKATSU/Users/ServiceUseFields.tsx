@@ -1,5 +1,6 @@
 import * as React from "react";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core";
+import { StyleRules } from "@material-ui/core/styles";
 import { FormikProps } from "formik";
 import Typography from "@material-ui/core/Typography";
 import FormGroup from "@material-ui/core/FormGroup";
@@ -11,6 +12,7 @@ import FormikCheckbox from "@components/molecules/FormikCheckbox";
 import FormikSwitch from "@components/molecules/FormikSwitch";
 import FormikRadioButtons from "@components/molecules/FormikRadioButtons";
 import FormikSelectDateNotSelectedDefault from "@components/molecules/FormikSelectDateNotSelectedDefault";
+import SubsidizedFields from "@components/organisms/mgr/common/Users/items/SubsidizedFields";
 import { FacilityState } from "@stores/domain/mgr/JIRITSUKUNRENSEIKATSU/facility/types";
 import { OptionInterface } from "@components/atoms/DropDown";
 import {
@@ -29,7 +31,7 @@ import {
 } from "@constants/variables";
 import { UsersValues } from "@initialize/mgr/JIRITSUKUNRENSEIKATSU/users/initialValues";
 
-const styles = () =>
+const styles = (): StyleRules =>
   createStyles({
     groupDate: {
       marginLeft: 16
@@ -92,12 +94,28 @@ interface State {
 }
 
 class ServiceUseFields extends React.Component<Props, State> {
-  public static getDerivedStateFromProps(nextProps: Props, prevState: State) {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      shouldFirstSetup: true,
+      showIncomeKindType: true,
+      showUpperLimitTotalYenAndUserLoadYen: true,
+      showUpperLimitYen: false,
+      showAgreedByContractFlg: false,
+      pickupPremisesCase: PICKUP_PREMISES_CASE_0,
+      showPickupPremises: true
+    };
+  }
+
+  public static getDerivedStateFromProps(
+    nextProps: Props,
+    prevState: State
+  ): State | null {
     if (!prevState.shouldFirstSetup || !nextProps.isFetchDone) {
       return null;
     }
 
-    const serviceUse = nextProps.formikProps.values.serviceUse;
+    const { serviceUse } = nextProps.formikProps.values;
     let pickupPremisesList = PICKUP_PREMISES_CASE_0;
     switch (serviceUse.defPickup) {
       case "1":
@@ -109,6 +127,7 @@ class ServiceUseFields extends React.Component<Props, State> {
       case "3":
         pickupPremisesList = PICKUP_PREMISES_CASE_3;
         break;
+      default:
     }
     return {
       shouldFirstSetup: false,
@@ -122,17 +141,74 @@ class ServiceUseFields extends React.Component<Props, State> {
     };
   }
 
-  public state = {
-    shouldFirstSetup: true,
-    showIncomeKindType: true,
-    showUpperLimitTotalYenAndUserLoadYen: true,
-    showUpperLimitYen: false,
-    showAgreedByContractFlg: false,
-    pickupPremisesCase: PICKUP_PREMISES_CASE_0,
-    showPickupPremises: true
+  /**
+   * 負担上限額が1の時、所得区分を表示
+   */
+  private onChangeIncomeKindHook = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showIncomeKindType: value === "1" });
   };
 
-  public render() {
+  /**
+   * 契約支給量が選択されたら、日数と事業者記入欄番号を表示
+   */
+  private onChangeAgreedByContractHook = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showAgreedByContractFlg: value === "2" });
+  };
+
+  /**
+   * 送迎サービスデフォルトの値によって、同一敷地内のセレクトリストを変更
+   */
+  private onChangePickupPremisesHook = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const { value } = e.target;
+    let pickupPremisesList = PICKUP_PREMISES_CASE_0;
+    switch (value) {
+      case "1":
+        pickupPremisesList = PICKUP_PREMISES_CASE_1;
+        break;
+      case "2":
+        pickupPremisesList = PICKUP_PREMISES_CASE_2;
+        break;
+      case "3":
+        pickupPremisesList = PICKUP_PREMISES_CASE_3;
+        break;
+      default:
+    }
+    this.setState({
+      pickupPremisesCase: pickupPremisesList,
+      showPickupPremises: value === "0"
+    });
+    this.props.setFormikFieldValue("serviceUse.pickupPremises", "0");
+  };
+
+  /**
+   * 管理事業所が1の時、総費用額と利用者負担額を表示
+   */
+  private onChangeUpperLimitControlledBy = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showUpperLimitTotalYenAndUserLoadYen: value === "1" });
+  };
+
+  /**
+   * 管理結果が3の時、自事業所調整上限額を表示
+   */
+  private onChangeResultOfManagement = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const { value } = e.target;
+    this.setState({ showUpperLimitYen: value === "3" });
+  };
+
+  public render(): JSX.Element {
     const startAddYearTo = 1;
     const endAddYearTo = 5;
     return (
@@ -147,7 +223,7 @@ class ServiceUseFields extends React.Component<Props, State> {
           <FormikSelectDateNotSelectedDefault
             name="serviceUse.inServiceStartDate"
             label="サービス提供開始日"
-            required={true}
+            required
             style={{ marginBottom: 12 }}
             addYearTo={startAddYearTo}
             setFormikFieldValue={this.props.setFormikFieldValue}
@@ -164,7 +240,7 @@ class ServiceUseFields extends React.Component<Props, State> {
           <FormikSelectDateNotSelectedDefault
             name="serviceUse.payStartDate"
             label="支給決定開始日 "
-            required={true}
+            required
             style={{ marginBottom: 12 }}
             addYearTo={startAddYearTo}
             setFormikFieldValue={this.props.setFormikFieldValue}
@@ -172,7 +248,7 @@ class ServiceUseFields extends React.Component<Props, State> {
           <FormikSelectDateNotSelectedDefault
             name="serviceUse.payEndDate"
             label="支給決定終了日"
-            required={true}
+            required
             addYearTo={endAddYearTo}
             setFormikFieldValue={this.props.setFormikFieldValue}
           />
@@ -192,7 +268,7 @@ class ServiceUseFields extends React.Component<Props, State> {
               options={AGREED_BY_CONTRACT_LIST}
               onChangeHook={this.onChangeAgreedByContractHook}
             />
-            <FormGroup row={true}>
+            <FormGroup row>
               {this.state.showAgreedByContractFlg && (
                 <FormikTextField
                   className={this.props.classes.payDaysAgreed}
@@ -233,6 +309,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             </div>
           </div>
         </FormGroup>
+        <SubsidizedFields formikProps={this.props.formikProps} />
         <FormikSwitch
           name="serviceUse.upperLimitFacilityFlag"
           label="上限管理事業所あり"
@@ -243,7 +320,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             options={UPLIMIT_CONT_ROLLED_BY_LIST}
             onChangeHook={this.onChangeUpperLimitControlledBy}
           />
-          <FormGroup row={true}>
+          <FormGroup row>
             <FormikTextField
               name="serviceUse.upperLimitFacilityNumber"
               label="事業所番号"
@@ -255,7 +332,7 @@ class ServiceUseFields extends React.Component<Props, State> {
             />
           </FormGroup>
           {this.state.showUpperLimitTotalYenAndUserLoadYen && (
-            <FormGroup row={true}>
+            <FormGroup row>
               <FormikTextField
                 name="serviceUse.upperLimitTotalYen"
                 label="総費用額"
@@ -329,7 +406,7 @@ class ServiceUseFields extends React.Component<Props, State> {
               label=""
               options={SUPPLY_PICKUP_SERVICE}
               disabled={!this.props.facility.transferServiceFlag}
-              onChangeHook={this.onChangepickupPremisesHook}
+              onChangeHook={this.onChangePickupPremisesHook}
             />
           </div>
           <div className={this.props.classes.supplyPickupInSameSiteService}>
@@ -356,72 +433,6 @@ class ServiceUseFields extends React.Component<Props, State> {
       </FormPaper>
     );
   }
-
-  /**
-   * 負担上限額が1の時、所得区分を表示
-   */
-  private onChangeIncomeKindHook = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showIncomeKindType: value === "1" });
-  };
-
-  /**
-   * 契約支給量が選択されたら、日数と事業者記入欄番号を表示
-   */
-  private onChangeAgreedByContractHook = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showAgreedByContractFlg: value === "2" });
-  };
-
-  /**
-   * 送迎サービスデフォルトの値によって、同一敷地内のセレクトリストを変更
-   */
-  private onChangepickupPremisesHook = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value;
-    let pickupPremisesList = PICKUP_PREMISES_CASE_0;
-    switch (value) {
-      case "1":
-        pickupPremisesList = PICKUP_PREMISES_CASE_1;
-        break;
-      case "2":
-        pickupPremisesList = PICKUP_PREMISES_CASE_2;
-        break;
-      case "3":
-        pickupPremisesList = PICKUP_PREMISES_CASE_3;
-        break;
-    }
-    this.setState({
-      pickupPremisesCase: pickupPremisesList,
-      showPickupPremises: value === "0"
-    });
-    this.props.setFormikFieldValue("serviceUse.pickupPremises", "0");
-  };
-
-  /**
-   * 管理事業所が1の時、総費用額と利用者負担額を表示
-   */
-  private onChangeUpperLimitControlledBy = (
-    e: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showUpperLimitTotalYenAndUserLoadYen: value === "1" });
-  };
-
-  /**
-   * 管理結果が3の時、自事業所調整上限額を表示
-   */
-  private onChangeResultOfManagement = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value;
-    this.setState({ showUpperLimitYen: value === "3" });
-  };
 }
 
 export default withStyles(styles)(ServiceUseFields);

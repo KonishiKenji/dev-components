@@ -24,6 +24,11 @@ interface Fields {
   disabilityClass: RadioButtonValue;
   incomeKind: RadioButtonValue;
   incomeKindType: SelectValue;
+  subsidizedFlag: SwitchValue;
+  subsidizedPercent: InputValue;
+  subsidizedYen: InputValue;
+  subsidizedUnit: SelectValue;
+  subsidizedCityId: SelectValue;
   upperLimitFacilityFlag: SwitchValue;
   upperLimitControlledBy: SelectValue;
   upperLimitFacilityNumber: InputValue;

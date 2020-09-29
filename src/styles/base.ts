@@ -1,11 +1,10 @@
-/* eslint-disable flowtype/require-valid-file-annotation */
 import {
   BASE_BLUE_COLOR,
   BASE_TEXT_COLOR,
   SAVE_BUTTON_AREA_HEIGHT,
   SUCCESS_COLOR,
   WARNING_COLOR
-} from "../constants/styles";
+} from "@constants/styles";
 
 // 注: object-rest-spreadでの使用を想定しているため、各スタイルのプロパティ名が被ってしまうと、後に書いたもので上書きされます
 

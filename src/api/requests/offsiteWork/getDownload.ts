@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -45,7 +46,10 @@ export interface GetDownloadResponse {
  * @param year 対象年
  * @param month 対象月
  */
-const getDownload = async (year: string, month: string) => {
+const getDownload = async (
+  year: string,
+  month: string
+): Promise<AxiosResponse<GetDownloadResponse>> => {
   const url = `${VERSION_URL}/offsite_work/download/${year}/${month}`;
   return request.get<GetDownloadResponse>(url);
 };

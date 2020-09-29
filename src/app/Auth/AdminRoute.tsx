@@ -2,6 +2,7 @@ import * as React from "react";
 import { Route, RouteProps } from "react-router-dom";
 import { connect } from "react-redux";
 import { UserState } from "@stores/domain/user/type";
+import { AppState } from "@stores/type";
 import NoMatch from "@components/pages/error/NoMatch";
 
 interface OwnProps {
@@ -35,8 +36,8 @@ const AdminRoute: React.FunctionComponent<Props> = ({
   );
 };
 
-const mapStateToProps = (state: any): StateProps => ({
+const mapStateToProps = (state: AppState): StateProps => ({
   user: state.user
 });
 
-export default connect<StateProps>(mapStateToProps)(AdminRoute);
+export default connect(mapStateToProps)(AdminRoute);

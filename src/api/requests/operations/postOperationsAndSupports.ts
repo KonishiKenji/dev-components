@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -69,7 +70,7 @@ export interface PostOperationsAndSupportsParams {
 const postOperationsAndSupports = async (
   yyyymmdd: string,
   params: PostOperationsAndSupportsParams
-) => {
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/operations/${yyyymmdd}`;
   return request.post(url, params);
 };

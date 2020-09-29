@@ -20,17 +20,17 @@ import ChevronRight from "@material-ui/icons/ChevronRight";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 import { DRAWER_WIDTH, DRAWER_WIDTH_MIN, DARK_BLUE } from "@constants/styles";
 import { FacilityType } from "@constants/variables";
-import { MENU_ITEM_LIST_G } from "@constants/mgr/GroupHome/menu";
-import { MENU_ITEM_LIST_SEIKATSUKAIGO } from "@constants/mgr/SEIKATSUKAIGO/menu";
-import { MENU_ITEM_LIST_SHUROTEICHAKU } from "@constants/mgr/SHUROTEICHAKU/menu";
-import { MENU_ITEM_LIST_JIRITSUKUNRENSEIKATSU } from "@constants/mgr/JIRITSUKUNRENSEIKATSU/menu";
-import { MENU_ITEM_LIST_TANKINYUSHO } from "@constants/mgr/TANKINYUSHO/menu";
-import { MENU_ITEM_LIST_SHISETSUNYUSHO } from "@constants/mgr/SHISETSUNYUSHO/menu";
+import MENU_ITEM_LIST_G from "@constants/mgr/GroupHome/menu";
+import MENU_ITEM_LIST_IAB from "@constants/mgr/IAB/menu";
+import MENU_ITEM_LIST_SEIKATSUKAIGO from "@constants/mgr/SEIKATSUKAIGO/menu";
+import MENU_ITEM_LIST_SHUROTEICHAKU from "@constants/mgr/SHUROTEICHAKU/menu";
+import MENU_ITEM_LIST_JIRITSUKUNRENSEIKATSU from "@constants/mgr/JIRITSUKUNRENSEIKATSU/menu";
+import MENU_ITEM_LIST_TANKINYUSHO from "@constants/mgr/TANKINYUSHO/menu";
+import MENU_ITEM_LIST_SHISETSUNYUSHO from "@constants/mgr/SHISETSUNYUSHO/menu";
 import { MenuItemList } from "@constants/menu";
 import knowbeLogoSmall from "@images/knowbe-logo-small.png";
 import DrawerList from "@components/molecules/DrawerList";
 import KnowbeMgrLogo from "@components/atoms/KnowbeMgrLogo";
-import { MENU_ITEM_LIST_IAB } from "@constants/mgr/IAB/menu";
 
 const styles = (theme: Theme): StyleRules =>
   createStyles({

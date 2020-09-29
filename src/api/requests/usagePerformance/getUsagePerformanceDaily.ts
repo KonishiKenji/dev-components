@@ -1,5 +1,7 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
+import { ReportResultAPI } from "@stores/domain/report/type";
 
 export interface GetUsagePerformanceDailyParams {
   data: {
@@ -63,13 +65,22 @@ export interface GetUsagePerformanceDailyParams {
 
 export type GetUsagePerformanceParamsDaily = GetUsagePerformanceDailyParams["data"]["usage_performance"][0];
 
+type ForNormalizeReportDataFromAPI = {
+  data: ReportResultAPI;
+};
+
+type GetUsagePerformanceDailyResponse = ForNormalizeReportDataFromAPI &
+  GetUsagePerformanceDailyParams;
+
 /**
  * 日毎の利用実績を取得
  * @param date 対象日 YYYYMMDD
  */
-export const getUsagePerformanceDaily = async (date: string) => {
+export const getUsagePerformanceDaily = async (
+  date: string
+): Promise<AxiosResponse<GetUsagePerformanceDailyResponse>> => {
   const url = `${VERSION_URL}/usage_performance/daily/${date}`;
-  return request.get(url);
+  return request.get<GetUsagePerformanceDailyResponse>(url);
 };
 
 export default getUsagePerformanceDaily;

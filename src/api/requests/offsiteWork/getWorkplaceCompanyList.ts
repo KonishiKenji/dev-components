@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -18,7 +19,9 @@ export interface GetWorkplaceCompanyListResponse {
 /**
  * 指定月の施設外就労の詳細データの取得
  */
-const getWorkplaceCompanyList = async () => {
+const getWorkplaceCompanyList = async (): Promise<
+  AxiosResponse<GetWorkplaceCompanyListResponse>
+> => {
   const url = `${VERSION_URL}/offsite_work/workplace_company_list`;
   return request.get<GetWorkplaceCompanyListResponse>(url);
 };

@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -17,7 +18,9 @@ export interface GetOperationsUserSummaryList {
 /**
  * 指定日の利用者のステータスの状態を返す
  */
-const getOperationsUserSummaryList = async (yyyymmdd: string) => {
+const getOperationsUserSummaryList = async (
+  yyyymmdd: string
+): Promise<AxiosResponse<GetOperationsUserSummaryList>> => {
   const url = `${VERSION_URL}/operations/user_summary_list/${yyyymmdd}`;
   return request.get<GetOperationsUserSummaryList>(url);
 };

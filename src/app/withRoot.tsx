@@ -8,7 +8,7 @@ import { theme } from "@styles/theme";
 
 // tslint:disable-next-line:variable-name
 function withRoot<P>(Component: React.ComponentType<P>) {
-  return (props: P) => {
+  return (props: P): JSX.Element => {
     return (
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>

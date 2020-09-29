@@ -1,17 +1,12 @@
 import * as React from "react";
-
-import { dateToLocalisedString } from "@utils/date";
-import { withStyles } from "@material-ui/core/styles";
-import { createStyles, WithStyles } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-
-import { Theme } from "@material-ui/core/styles/createMuiTheme";
-
+import { createStyles, withStyles } from "@material-ui/core";
+import { WithStyles, StyleRules } from "@material-ui/core/styles";
+import { dateToLocalisedString } from "@utils/date";
 import {
   InvoiceUserReceiptData,
   InvoiceUserReceiptDataUser
 } from "@stores/domain/invoice/type";
-
 import {
   PRINT_PAGE_WIDTH,
   PRINT_PAGE_PADDING,
@@ -19,7 +14,7 @@ import {
   PRINT_PAGE_MARGIN_BOTTOM
 } from "@constants/styles";
 
-const styles = (theme: Theme) =>
+const styles = (): StyleRules =>
   createStyles({
     body: {
       height: PRINT_PAGE_HEIGHT,
@@ -66,7 +61,7 @@ const styles = (theme: Theme) =>
       marginTop: 16
     },
     dateContainer: {
-      marginTop: 24
+      marginTop: 18
     },
     userContainer: {
       marginTop: 4
@@ -84,7 +79,7 @@ const styles = (theme: Theme) =>
       marginTop: 16
     },
     image: {
-      height: 56,
+      height: 54,
       width: "100%"
     },
     imageText: {
@@ -165,27 +160,10 @@ interface Props extends WithStyles<typeof styles> {
   noticeDate: string;
 }
 class PreviewUserAgencyReceipts extends React.Component<Props> {
-  public render() {
-    const { classes, data, key } = this.props;
-    if (!data) {
-      return null;
-    }
-    const { users } = data;
-
-    return (
-      <React.Fragment key={key}>
-        {users.map(user => (
-          <div key={user.recipient_number} className={classes.body}>
-            {this.receiptRender(user, false)}
-            <div className={classes.divider} />
-            {this.receiptRender(user, true)}
-          </div>
-        ))}
-      </React.Fragment>
-    );
-  }
-
-  public receiptRender(user: InvoiceUserReceiptDataUser, copy = false) {
+  public receiptRender(
+    user: InvoiceUserReceiptDataUser,
+    copy = false
+  ): JSX.Element {
     const { classes, data, targetDate, noticeDate } = this.props;
     const { date, facility } = data;
 
@@ -198,8 +176,14 @@ class PreviewUserAgencyReceipts extends React.Component<Props> {
           </h1>
         </header>
         <div className={`${classes.caption} ${classes.dateContainer}`}>
-          <div>受領日：{targetDate}</div>
-          <div>通知日：{noticeDate}</div>
+          <div>
+            受領日：
+            {targetDate}
+          </div>
+          <div>
+            通知日：
+            {noticeDate}
+          </div>
         </div>
         <div className={classes.userContainer}>
           <div className={classes.emphasizeText}>
@@ -233,12 +217,12 @@ class PreviewUserAgencyReceipts extends React.Component<Props> {
             <div
               className={`${classes.valueText} ${classes.imageText} after strong right`}
             >
-              ¥ {user.payment_cost_amount}-
+              {`¥ ${user.payment_cost_amount}-`}
             </div>
           </div>
         </div>
-        <Grid container={true} className={classes.container}>
-          <Grid item={true} xs={5}>
+        <Grid container className={classes.container}>
+          <Grid item xs={5}>
             <div className={classes.note}>
               但し、
               {dateToLocalisedString(date.start_of_month, "YYYY年M月分")}
@@ -247,7 +231,7 @@ class PreviewUserAgencyReceipts extends React.Component<Props> {
               上記正に受領いたしました。
             </div>
           </Grid>
-          <Grid item={true} xs={7}>
+          <Grid item xs={7}>
             <div className={classes.halfContainer}>
               <div>
                 <div className={classes.labelText}>事業所種別</div>
@@ -271,6 +255,26 @@ class PreviewUserAgencyReceipts extends React.Component<Props> {
           </Grid>
         </Grid>
       </section>
+    );
+  }
+
+  public render(): JSX.Element | null {
+    const { classes, data, key } = this.props;
+    if (!data) {
+      return null;
+    }
+    const { users } = data;
+
+    return (
+      <React.Fragment key={key}>
+        {users.map((user) => (
+          <div key={user.recipient_number} className={classes.body}>
+            {this.receiptRender(user, false)}
+            <div className={classes.divider} />
+            {this.receiptRender(user, true)}
+          </div>
+        ))}
+      </React.Fragment>
     );
   }
 }

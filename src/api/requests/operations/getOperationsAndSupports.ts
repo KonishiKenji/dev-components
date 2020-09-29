@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -96,7 +97,9 @@ export interface GetOperationsAndSupports {
  * 指定日の業務記録と支援記録を取得する
  * @param yyyymmdd 日付
  */
-const getOperationsAndSupports = async (yyyymmdd: string) => {
+const getOperationsAndSupports = async (
+  yyyymmdd: string
+): Promise<AxiosResponse<GetOperationsAndSupports>> => {
   const url = `${VERSION_URL}/operations/${yyyymmdd}`;
   return request.get<GetOperationsAndSupports>(url);
 };

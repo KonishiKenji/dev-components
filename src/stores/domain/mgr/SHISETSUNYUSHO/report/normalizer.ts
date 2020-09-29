@@ -143,6 +143,7 @@ const convertUsagePerformanceDaily = (
 /**
  * APIパラメータからstoreに変換(日ごと)
  * @param result
+ * @param targetDate
  */
 export const normalizeSHISETSUNYUSHOReportDailyDataFromAPI = (
   result: GetUsagePerformanceDailyParams,
@@ -152,7 +153,7 @@ export const normalizeSHISETSUNYUSHOReportDailyDataFromAPI = (
     ? ""
     : dateInHyphenYYYYMMDDFormat(targetDate);
 
-  const normalized: ReportState["reportDaily"] = {
+  return {
     usagePerformanceDaily: normalizeGetUsagePerformanceDaily(
       formatedDate,
       result.data.usage_performance_daily
@@ -164,7 +165,6 @@ export const normalizeSHISETSUNYUSHOReportDailyDataFromAPI = (
       result.data.usage_performance_shisetsunyusho
     )
   };
-  return normalized;
 };
 
 /**
@@ -179,7 +179,7 @@ const normalizeGetUsagePerformanceDaily = (
   return {
     before: {
       id: getUsagePerformanceDaily ? getUsagePerformanceDaily.id : undefined,
-      targetDate: targetDate ? targetDate : undefined,
+      targetDate: targetDate || undefined,
       bodyRestraintAbolitionUnexecutedFlg: getUsagePerformanceDaily
         ? castNumberToCheckBox(
             getUsagePerformanceDaily.body_restraint_abolition_unexecuted_flg
@@ -188,7 +188,7 @@ const normalizeGetUsagePerformanceDaily = (
     },
     after: {
       id: getUsagePerformanceDaily ? getUsagePerformanceDaily.id : undefined,
-      targetDate: targetDate ? targetDate : undefined,
+      targetDate: targetDate || undefined,
       bodyRestraintAbolitionUnexecutedFlg: getUsagePerformanceDaily
         ? castNumberToCheckBox(
             getUsagePerformanceDaily.body_restraint_abolition_unexecuted_flg
@@ -255,7 +255,7 @@ const normalizeGetUsagePerformanceSHISETSUNYUSHO = (
   // getAPIのパラメータを連想配列に変換
   if (getUsagePerformanceSHISETSUNYUSHOList) {
     getUsagePerformanceSHISETSUNYUSHOList.forEach(
-      getUsagePerformanceSHISETSUNYUSHO => {
+      (getUsagePerformanceSHISETSUNYUSHO) => {
         storeUsagePerformanceSHISETSUNYUSHO[
           `${getUsagePerformanceSHISETSUNYUSHO.users_in_facility_id}_${getUsagePerformanceSHISETSUNYUSHO.target_date}`
         ] = {
@@ -446,9 +446,7 @@ const createUsagePerformanceSHISETSUNYUSHOParam = (
         isInitializedUsagePerformance
       ) {
         // サービス提供状況が【-】で更新している場合、差分更新せずに各項目の初期値に設定する
-        const diffObject: Partial<
-          UsagePerformanceSHISETSUNYUSHOType
-        > = isInitializedUsagePerformance
+        const diffObject: Partial<UsagePerformanceSHISETSUNYUSHOType> = isInitializedUsagePerformance
           ? initializeUsagePerformanceSHISETSUNYUSHO(
               usagePerformanceSHISETSUNYUSHO.after[keyValue]
             )
@@ -812,9 +810,7 @@ const normalizePostUsagePerformanceData = (
   };
 
   // disabledの項目を初期化する処理
-  let diffUsagePerformanceSHISETSUNYUSHO: Partial<
-    UsagePerformanceSHISETSUNYUSHOType
-  > = usagePerformanceSHISETSUNYUSHOFormValue;
+  let diffUsagePerformanceSHISETSUNYUSHO: Partial<UsagePerformanceSHISETSUNYUSHOType> = usagePerformanceSHISETSUNYUSHOFormValue;
   if (
     `${usagePerformanceFormValue.statusType}` === StatusType.NONE.toString()
   ) {

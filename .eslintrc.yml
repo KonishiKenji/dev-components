@@ -9,6 +9,9 @@ extends:
   - airbnb
   - plugin:@typescript-eslint/recommended
   - plugin:prettier/recommended
+  - prettier
+  - prettier/@typescript-eslint
+  - prettier/react
 overrides:
   - files:
       - src/**/*.(t)s?(x)
@@ -30,7 +33,6 @@ settings:
         - ./src
 parser: "@typescript-eslint/parser"
 parserOptions:
-  project: tsconfig.json
   sourceType: module
 globals:
   isNaN: false

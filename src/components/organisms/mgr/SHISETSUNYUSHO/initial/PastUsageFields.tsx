@@ -12,12 +12,6 @@ const styles = () =>
     },
     sectionTitle: {
       marginBottom: 18
-    },
-    space: {
-      marginLeft: 16
-    },
-    required: {
-      marginLeft: 4
     }
   });
 
@@ -35,37 +29,22 @@ const PastUsageFields: React.FC<Props> = (props) => {
       <FormGroup>
         <FormikTextField
           name="initialData.facility.total_number_of_users_1_month_before"
-          label={
-            <div>
-              １ヶ月前
-              <span className={props.classes.space}>延べ利用者数</span>
-              <span className={props.classes.required}>*</span>
-            </div>
-          }
+          label="１ヶ月前&nbsp;&nbsp;&nbsp;延べ利用者数"
           endAdornmentLabel="人"
+          required
           maxLength={10}
         />
         <FormikTextField
           name="initialData.facility.total_number_of_users_2_month_before"
-          label={
-            <div>
-              ２ヶ月前
-              <span className={props.classes.space}>延べ利用者数</span>
-              <span className={props.classes.required}>*</span>
-            </div>
-          }
+          label="２ヶ月前&nbsp;&nbsp;&nbsp;延べ利用者数"
           endAdornmentLabel="人"
+          required
           maxLength={10}
         />
         <FormikTextField
           name="initialData.facility.total_number_of_users_3_month_before"
-          label={
-            <div>
-              ３ヶ月前
-              <span className={props.classes.space}>延べ利用者数</span>
-              <span className={props.classes.required}>*</span>
-            </div>
-          }
+          label="３ヶ月前&nbsp;&nbsp;&nbsp;延べ利用者数"
+          required
           endAdornmentLabel="人"
           maxLength={10}
         />

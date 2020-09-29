@@ -1,9 +1,19 @@
 "use strict";
 
-const NODE_ENV = process.env.NODE_ENV || "production";
+const BUILD_ENV = process.env.BUILD_ENV || "production";
+process.env.BUILD_ENV = BUILD_ENV
 
-process.env.NODE_ENV = NODE_ENV;
-process.env.BABEL_ENV = NODE_ENV;
+// NODE_ENVをdevelopmentかproductionに振り分ける
+switch(BUILD_ENV) {
+  case "development":
+  case "development2":
+  case "development3":
+    process.env.NODE_ENV = "development";
+    break;
+  default:
+    process.env.NODE_ENV = "production";
+}
+process.env.BABEL_ENV = BUILD_ENV;
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -16,7 +26,7 @@ process.on("unhandledRejection", err => {
 require("../config/env");
 
 const configFile =
-  NODE_ENV === "production"
+  process.env.NODE_ENV === "production"
     ? "../config/webpack.config.prod"
     : "../config/webpack.config.dev";
 

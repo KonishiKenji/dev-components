@@ -244,8 +244,8 @@ const convertParamByStatus = (value: IABReport): IABReport => {
     inTime: "",
     outTime: "",
     extended: "0",
-    didGetFood: "0",
-    travelTime: "0",
+    didGetFood: "0" as string | null,
+    travelTime: "0" as string | null,
     pickupPremises: "0",
     memo: "",
     worked: 0,
@@ -261,6 +261,11 @@ const convertParamByStatus = (value: IABReport): IABReport => {
 
   // サービス提供の状況確認、不要項目の初期化
   switch (value.status) {
+    case 1:
+      // 食事・送迎にnullを設定するとAPIから利用者情報のデフォルト値が返ってくる
+      initialValue.didGetFood = null;
+      initialValue.travelTime = null;
+      break;
     case 2:
     case 3:
     case 4:
@@ -409,8 +414,8 @@ const removeNoChangeData = (
   const differenceObject: RequestParam["otherParam"] = {
     status: resultAfter.status,
     restTime: 60,
-    didGetFood: resultAfter.didGetFood ? resultAfter.didGetFood : "0",
-    travelTime: resultAfter.travelTime ? resultAfter.travelTime : "0",
+    didGetFood: resultAfter.didGetFood ? resultAfter.didGetFood : null,
+    travelTime: resultAfter.travelTime ? resultAfter.travelTime : null,
     pickupPremises: resultAfter.pickupPremises
       ? resultAfter.pickupPremises
       : "0",
@@ -516,7 +521,7 @@ const normalizeReportList = (
 
 const normalizeCountPerStatus = (
   result: GetInOutDailySummaryResponse | GetInOutUserSummaryResponse
-) => {
+): IABSummary["countsPerStatus"] => {
   const resultList: { status: number | null; count: number | null }[] = [];
   Object.keys(result.data.summary.countsPerStatus).forEach((key) => {
     const target = result.data.summary.countsPerStatus[key];
@@ -673,7 +678,7 @@ export const addChangedDataToReportList = (
   values: InitialDataValues,
   reportList: IABReport[],
   type: IABReportTypeInterface["type"]
-) => {
+): IABReport[] => {
   const result = JSON.parse(JSON.stringify(reportList));
   Object.keys(reportList).forEach((key) => {
     if (

@@ -1,6 +1,7 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
-import UsersInFacilityJIRITSUKUNRENSEIKATSU from "@api/requests/initial/params/usersInFacilityJIRITSUKUNRENSEIKATSU";
+import { UsersInFacilityJIRITSUKUNRENSEIKATSU } from "@api/requests/initial/params/usersInFacilityJIRITSUKUNRENSEIKATSU";
 
 export interface PostInitialParams {
   facility: Partial<{
@@ -33,7 +34,9 @@ export interface PostInitialParams {
  * 初期設定情報を更新する
  * @param values PostInitialParams
  */
-export const postInitial = async (values: PostInitialParams) => {
+export const postInitial = async (
+  values: PostInitialParams
+): Promise<AxiosResponse<void>> => {
   const url = `${VERSION_URL}/initial`;
   return request.post(url, values);
 };

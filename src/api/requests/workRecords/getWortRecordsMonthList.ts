@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -11,7 +12,9 @@ export interface GetWorkRecordsMonthListResponse {
 /**
  * 作業時間サマリの対象年月リストを取得する
  */
-export const getWortRecordsMonthList = async () => {
+export const getWortRecordsMonthList = async (): Promise<
+  AxiosResponse<GetWorkRecordsMonthListResponse>
+> => {
   const url = `${VERSION_URL}/work-records/date_list`;
   return request.get<GetWorkRecordsMonthListResponse>(url);
 };

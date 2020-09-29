@@ -221,7 +221,7 @@ const styles = (): StyleRules =>
     title: {
       margin: 0,
       marginTop: 13,
-      fontSize: 24,
+      fontSize: 18,
       fontWeight: "normal",
       letterSpacing: 1.2,
       color: "rgba(0, 0, 0, 0.84)"
@@ -229,7 +229,7 @@ const styles = (): StyleRules =>
     otherInfo: {
       display: "flex",
       justifyContent: "space-between",
-      marginTop: 2,
+      marginTop: 8,
       fontSize: 10
     },
     period: {
@@ -919,7 +919,7 @@ const Sheet = (props: SheetProps): JSX.Element => {
   return (
     <div className={classes.page}>
       <header>
-        <h1 className={classes.title}>就労継続支援A型計画書</h1>
+        <h1 className={classes.title}>就労継続支援A型 個別支援計画書</h1>
       </header>
       <div className={classes.otherInfo}>
         <div>

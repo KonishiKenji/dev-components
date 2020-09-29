@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { createStyles, WithStyles } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
-import { withStyles } from "@material-ui/core/styles";
+import { StyleRules, withStyles } from "@material-ui/core/styles";
 import { Theme } from "@material-ui/core/styles/createMuiTheme";
 import FormLabel from "@material-ui/core/FormLabel";
 import DescriptionIcon from "@material-ui/icons/InfoOutlined";
@@ -18,10 +18,10 @@ import TextField from "@components/atoms/TextField";
 import DateSelectFields from "@components/molecules/DateSelectFields";
 import { INPUT_LABEL_COLOR } from "@constants/styles";
 
-import Field, { FieldType } from "@components/atoms/Field";
+import { Field, FieldType } from "@components/atoms/Field";
 import { dateInYYYYFormat } from "@utils/date";
 
-const styles = ({ palette, spacing }: Theme) =>
+const styles = ({ spacing }: Theme): StyleRules =>
   createStyles({
     root: {
       margin: spacing.unit * 2,
@@ -64,7 +64,7 @@ interface OwnProps {
 
 interface Props extends WithStyles<typeof styles>, OwnProps {}
 
-const formSection: React.FunctionComponent<Props> = props => (
+const formSection: React.FunctionComponent<Props> = (props) => (
   <Paper
     className={props.classes.root}
     elevation={0}
@@ -74,7 +74,7 @@ const formSection: React.FunctionComponent<Props> = props => (
       <SectionTitle label={props.sectionName} />
     </div>
     <div className={props.classes.formContainer}>
-      {props.fields.map(field => {
+      {props.fields.map((field) => {
         const additionalStyles = field.styles !== undefined ? field.styles : {};
 
         if (field.type === FieldType.RADIO_BUTTON) {
@@ -177,8 +177,6 @@ const formSection: React.FunctionComponent<Props> = props => (
                 isError={
                   field.errorMessage !== undefined &&
                   field.errorMessage.length > 0
-                    ? true
-                    : false
                 }
                 isRequired={
                   field.isRequired !== undefined ? field.isRequired : true
@@ -192,9 +190,9 @@ const formSection: React.FunctionComponent<Props> = props => (
         if (field.type === FieldType.DATE_SELECT_FIELDS) {
           let thisYear = +dateInYYYYFormat(new Date());
           if (field.id === "date_end_in_service") {
-            thisYear = thisYear + 1;
+            thisYear += 1;
           } else if (field.id === "date_pay_end") {
-            thisYear = thisYear + 5;
+            thisYear += 5;
           }
           return (
             <div key={field.id} style={additionalStyles}>
@@ -209,8 +207,6 @@ const formSection: React.FunctionComponent<Props> = props => (
                 isError={
                   field.errorMessage !== undefined &&
                   field.errorMessage.length > 0
-                    ? true
-                    : false
                 }
                 isRequired={
                   field.isRequired !== undefined ? field.isRequired : true
@@ -279,8 +275,6 @@ const formSection: React.FunctionComponent<Props> = props => (
               isError={
                 field.errorMessage !== undefined &&
                 field.errorMessage.length > 0
-                  ? true
-                  : false
               }
               onChange={field.onChange}
               onBlur={field.onBlur}

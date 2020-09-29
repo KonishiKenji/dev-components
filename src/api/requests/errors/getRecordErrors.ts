@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 import { FacilityType } from "@constants/variables";
@@ -27,7 +28,9 @@ export interface GetRecordErrorsResponse {
 /**
  * 全ての個別支援計画のエラー一覧を取得する
  */
-export const getRecordErrors = async () => {
+export const getRecordErrors = async (): Promise<
+  AxiosResponse<GetRecordErrorsResponse>
+> => {
   const url = `${VERSION_URL}/errors/records`;
   return request.get<GetRecordErrorsResponse>(url);
 };

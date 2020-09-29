@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import request from "@api/index";
 import { VERSION_URL } from "@config";
 
@@ -44,9 +45,21 @@ export interface PostUpdateFacilityUserParams {
     uplimit_facility_flg?: string | null | undefined;
     uplimit_controlled_by?: string | null | undefined;
     uplimit_facility_number?: string | null | undefined;
+    uplimit_facility_number2?: string | null | undefined;
+    uplimit_facility_number3?: string | null | undefined;
+    uplimit_facility_number4?: string | null | undefined;
     uplimit_facility_name?: string | null | undefined;
+    uplimit_facility_name2?: string | null | undefined;
+    uplimit_facility_name3?: string | null | undefined;
+    uplimit_facility_name4?: string | null | undefined;
     uplimit_total_yen?: number | null | undefined;
+    uplimit_total_yen2?: number | null | undefined;
+    uplimit_total_yen3?: number | null | undefined;
+    uplimit_total_yen4?: number | null | undefined;
     uplimit_user_load_yen?: number | null | undefined;
+    uplimit_user_load_yen2?: number | null | undefined;
+    uplimit_user_load_yen3?: number | null | undefined;
+    uplimit_user_load_yen4?: number | null | undefined;
     result_of_management?: string | null | undefined;
     uplimit_yen?: number | null | undefined;
     create_support_plan_flg?: string | null | undefined;
@@ -173,7 +186,7 @@ export interface PostUpdateFacilityUserParams {
 export const postUpdateFacilityUser = async (
   id: number | undefined,
   values: PostUpdateFacilityUserParams
-) => {
+): Promise<AxiosResponse<unknown>> => {
   const url = `${VERSION_URL}/facility/users/${id}`;
   return request.post(url, values);
 };
