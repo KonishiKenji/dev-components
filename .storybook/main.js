@@ -1,11 +1,15 @@
 module.exports = {
-  "stories": [
-    "../src/**/*.stories.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)"
+  stories: ["../stories/**/*.stories.tsx"],
+  addons: [
+    "@storybook/addon-actions/register",
+    "@storybook/addon-knobs/register",
   ],
-  "addons": [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/preset-create-react-app"
-  ]
-}
+  webpackFinal: async config => {
+    // see: https://github.com/storybookjs/storybook/issues/6408#issuecomment-648197797
+    config.optimization = {
+      minimize: false,
+      minimizer: [],
+    };
+    return config;
+  }
+};
